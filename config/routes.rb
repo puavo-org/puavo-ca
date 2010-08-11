@@ -1,4 +1,7 @@
 PuavoCa::Application.routes.draw do
+  match 'certificates/sign' => 'certificates#sign'
+  resources :certificates
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

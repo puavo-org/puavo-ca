@@ -5,28 +5,27 @@ class Certificate < ActiveRecord::Base
   attr_accessor :host_certificate_request
   before_create :sign_certificate
 
-  Certdirpath = '/etc/opinsys/puavo-ca'
-
   def sign_certificate
     csr = OpenSSL::X509::Request.new(self.host_certificate_request)
     hostname = csr.subject.to_s.sub(/\/CN=/i, '').downcase
-    org_domain = self.fqdn	# XXX
+    domain = self.fqdn
 
     # XXX should domain be hardwired?  that we won't sign random stuff?
     # XXX if so, where should the toplevel domain be configured?
 
-    sub_ca_cert_txt = File.read("#{ Certdirpath }/ca.#{ org_domain }.crt")
-    sub_ca_cert     = OpenSSL::X509::Certificate.new(sub_ca_cert_txt)
-    sub_ca_key      = key("ca.#{ org_domain }.key")
+    sub_ca_cert_path = "#{ PUAVO_CONFIG['certdirpath'] }/ca.#{ domain }.crt"
+    sub_ca_cert_txt  = File.read(sub_ca_cert_path)
+    sub_ca_cert      = OpenSSL::X509::Certificate.new(sub_ca_cert_txt)
+    sub_ca_key       = key("ca.#{ domain }.key")
 
     cert = OpenSSL::X509::Certificate.new
     cert.subject = OpenSSL::X509::Name.new(
-		     [[ 'CN', "#{ hostname }.#{ org_domain }" ]])
+		     [[ 'CN', "#{ hostname }.#{ domain }" ]])
 
     cert.not_after  = Time.now - 3 * 365 * 24 * 60 * 60
     cert.not_before = Time.now - 24 * 60 * 60
     cert.serial     = 1		# XXX should increment,
-				# XXX should be stored in database
+				# XXX should be stored in database?
 #   CertLib::CertSerial.number(:subject => cert.subject.to_s,
 #                              :expires_after => cert.not_after.strftime("%Y-%m-%d %H:%M:%S"))
     cert.version = 2
@@ -54,6 +53,7 @@ class Certificate < ActiveRecord::Base
 
 private
   def key(name)
-    OpenSSL::PKey::RSA.new(File.read("#{ Certdirpath }/#{ name }"))
+    key = File.read("#{ PUAVO_CONFIG['certdirpath'] }/#{ name }")
+    OpenSSL::PKey::RSA.new(key)
   end
 end

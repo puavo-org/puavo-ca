@@ -7,6 +7,7 @@ class CertificatesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @certificates }
+      format.json  { render :json => @certificates }
     end
   end
 
@@ -41,7 +42,8 @@ class CertificatesController < ApplicationController
   # POST /certificates.xml
   def create
     @certificate = Certificate.new(params[:certificate])
-
+    @certificate.organisation = organisation if organisation
+    
     respond_to do |format|
       if @certificate.save
         format.html { redirect_to(@certificate, :notice => 'Certificate was successfully created.') }

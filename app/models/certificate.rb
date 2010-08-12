@@ -8,7 +8,7 @@ class Certificate < ActiveRecord::Base
   def sign_certificate
     csr = OpenSSL::X509::Request.new(self.host_certificate_request)
     hostname = csr.subject.to_s.sub(/\/CN=/i, '').downcase
-    domain = self.fqdn
+    domain = self.fqdn.sub(/#{hostname}./i, '')
 
     # XXX should domain be hardwired?  that we won't sign random stuff?
     # XXX if so, where should the toplevel domain be configured?

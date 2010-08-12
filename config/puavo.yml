@@ -1,1 +1,2 @@
 certdirpath: /etc/opinsys/puavo-ca/opinsys.fi
+ldap_server: 10.246.114.41

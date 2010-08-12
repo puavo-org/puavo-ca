@@ -1,9 +1,10 @@
 require 'openssl'
 
 class Certificate < ActiveRecord::Base
-  # attr_write :host_certificate_request
   attr_accessor :host_certificate_request
   before_create :sign_certificate
+
+  validates_presence_of :organisation
 
   def sign_certificate
     csr = OpenSSL::X509::Request.new(self.host_certificate_request)

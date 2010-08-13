@@ -1,5 +1,6 @@
 PuavoCa::Application.routes.draw do
   resources :certificates, :only => [:create, :index, :show], :format => :json
+  match 'certificates/:id/revoke.json' => 'certificates#revoke', :via => :delete
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
 
   def require_http_auth_user
     unless authenticate_with_http_basic do |dn, password|
+        session[:dn] = dn
         LdapUser.authenticate(dn, password)
       end
       render :json => "401 Unauthorized.", :status => :unauthorized

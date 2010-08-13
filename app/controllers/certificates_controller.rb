@@ -13,7 +13,7 @@ class CertificatesController < ApplicationController
     @certificate = Certificate.find(params[:id])
 
     respond_to do |format|
-      format.xml  { render :json => @certificate }
+      format.json  { render :json => @certificate }
     end
   end
 
@@ -28,6 +28,19 @@ class CertificatesController < ApplicationController
       else
         format.json  { render :json => @certificate.errors, :status => :unprocessable_entity }
       end
+    end
+  end
+
+  # DELETE /certificates/1.json
+  def revoke
+    @certificate = Certificate.find(params[:id])
+    @certificate.revoked = true
+    @certificate.revoked_at = Time.now
+    @certificate.revoked_user = session[:dn]
+    @certificate.save
+
+    respond_to do |format|
+      format.json  { head :ok }
     end
   end
 end

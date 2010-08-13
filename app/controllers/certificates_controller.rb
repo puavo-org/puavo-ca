@@ -33,14 +33,19 @@ class CertificatesController < ApplicationController
 
   # DELETE /certificates/1.json
   def revoke
-    @certificate = Certificate.find(params[:id])
-    @certificate.revoked = true
-    @certificate.revoked_at = Time.now
-    @certificate.revoked_user = session[:dn]
-    @certificate.save
+    if @certificate = Certificate.find_by_fqdn_and_revoked(params[:fqdn], false)
+      @certificate.revoked = true
+      @certificate.revoked_at = Time.now
+      @certificate.revoked_user = session[:dn]
+      @certificate.save
+    end
 
     respond_to do |format|
-      format.json  { head :ok }
+      if @certificate
+        format.json  { head :ok }
+      else
+        format.json  { render :json => "404 Not Found", :status => :not_found }
+      end
     end
   end
 end

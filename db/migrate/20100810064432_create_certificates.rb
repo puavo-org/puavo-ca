@@ -3,7 +3,7 @@ class CreateCertificates < ActiveRecord::Migration
     create_table :certificates do |t|
       t.string :fqdn
       t.text :certificate
-      t.boolean :revoked
+      t.boolean :revoked, :default => 0
       t.datetime :revoked_at
       t.datetime :valid_until
       t.string :creator

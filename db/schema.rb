@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(:version => 20100811085856) do
   create_table "certificates", :force => true do |t|
     t.string   "fqdn"
     t.text     "certificate"
-    t.boolean  "revoked"
+    t.boolean  "revoked",      :default => false
     t.datetime "revoked_at"
     t.datetime "valid_until"
     t.string   "creator"

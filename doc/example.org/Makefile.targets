@@ -1,0 +1,11 @@
+workdir:
+	mkdir -m 700 -p $@
+
+workdir/index.txt: workdir
+	touch $@
+
+workdir/newcerts: workdir
+	mkdir -p $@
+
+workdir/serial: workdir
+	test -e $@ || echo 01 > $@

@@ -8,12 +8,34 @@ class CertificatesController < ApplicationController
     end
   end
 
+  # GET /certificates/revoked_list.json
+  def revoked_list
+    @certificates = Certificate.where(:revoked => true)
+    
+    respond_to do |format|
+      format.json  { render :json => @certificates }
+    end
+  end
+
   # GET /certificates/1.json
   def show
     @certificate = Certificate.find(params[:id])
 
     respond_to do |format|
       format.json  { render :json => @certificate }
+    end
+  end
+
+  # GET /certificates/show_by_fqdn.json
+  def show_by_fqdn
+    @certificate = Certificate.find_by_fqdn_and_revoked(params[:fqdn], false)
+
+    respond_to do |format|
+      if @certificate
+        format.json  { render :json => @certificate }
+      else
+        format.json  { render :json => "404 Not Found", :status => :not_found }
+      end
     end
   end
 

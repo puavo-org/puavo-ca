@@ -1,6 +1,8 @@
 PuavoCa::Application.routes.draw do
+  match 'certificates/revoked_list(.:format)' => 'certificates#revoked_list', :via => :get, :format => :json
+  match 'certificates/show_by_fqdn(.:format)' => 'certificates#show_by_fqdn', :via => :get, :format => :json
+  match 'certificates/revoke(.:format)' => 'certificates#revoke', :via => :delete, :format => :json
   resources :certificates, :only => [:create, :index, :show], :format => :json
-  match 'certificates/revoke.json' => 'certificates#revoke', :via => :delete
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

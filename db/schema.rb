@@ -10,12 +10,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100811085856) do
+ActiveRecord::Schema.define(:version => 20100816131053) do
 
   create_table "certificates", :force => true do |t|
     t.string   "fqdn"
     t.text     "certificate"
-    t.boolean  "revoked",      :default => false
+    t.boolean  "revoked",       :default => false
     t.datetime "revoked_at"
     t.datetime "valid_until"
     t.string   "creator"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20100811085856) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "organisation"
+    t.integer  "serial_number"
   end
 
 end

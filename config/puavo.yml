@@ -1,2 +1,2 @@
-certdirpath: /etc/opinsys/puavo-ca/opinsys.fi
+certdirpath: /etc/opinsys/puavo-ca/opinsys.fi/organisations
 ldap_server: 10.246.114.41

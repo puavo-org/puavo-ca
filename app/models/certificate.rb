@@ -5,14 +5,13 @@ class Certificate < ActiveRecord::Base
   before_create :sign_certificate
 
   validates_presence_of :organisation
+  validates_uniqueness_of :fqdn, :scope => :revoked, :if => Proc.new { |cert| cert.revoked == false }
 
   def sign_certificate
+    self.serial_number = Certificate.maximum( :serial_number, :conditions => [ "organisation = ?", self.organisation ] ).to_i + 1 
     csr = OpenSSL::X509::Request.new(self.host_certificate_request)
-    hostname = csr.subject.to_s.sub(/\/CN=/i, '').downcase
-    domain = self.fqdn.sub(/#{hostname}./i, '')
-
-    # XXX should domain be hardwired?  that we won't sign random stuff?
-    # XXX if so, where should the toplevel domain be configured?
+    hostname, *domain_a = self.fqdn.split('.')
+    domain              = domain_a.join('.')
 
     sub_ca_cert_path = "#{ PUAVO_CONFIG['certdirpath'] }/ca.#{ domain }.crt"
     sub_ca_cert_txt  = File.read(sub_ca_cert_path)
@@ -23,12 +22,9 @@ class Certificate < ActiveRecord::Base
     cert.subject = OpenSSL::X509::Name.new(
 		     [[ 'CN', "#{ hostname }.#{ domain }" ]])
 
-    cert.not_after  = Time.now - 3 * 365 * 24 * 60 * 60
+    cert.not_after  = Time.now + 3 * 365 * 24 * 60 * 60
     cert.not_before = Time.now - 24 * 60 * 60
-    cert.serial     = 1		# XXX should increment,
-				# XXX should be stored in database?
-#   CertLib::CertSerial.number(:subject => cert.subject.to_s,
-#                              :expires_after => cert.not_after.strftime("%Y-%m-%d %H:%M:%S"))
+    cert.serial     = self.serial_number
     cert.version = 2
 
     cert.public_key = csr.public_key

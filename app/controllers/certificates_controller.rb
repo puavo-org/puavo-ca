@@ -1,4 +1,14 @@
 class CertificatesController < ApplicationController
+  before_filter :require_http_auth_user, :except => :ca
+
+  # GET /certificates/ca.text
+  def ca
+    
+    respond_to do |format|
+      format.text  { send_data( File.read("#{ PUAVO_CONFIG['certdirpath'] }/ca.#{ params[:org] }.opinsys.fi-bundle.pem"), :type => 'text/plain' ) }
+    end
+  end
+
   # GET /certificates.json
   def index
     @certificates = Certificate.all

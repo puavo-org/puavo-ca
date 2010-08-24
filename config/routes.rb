@@ -1,4 +1,5 @@
 PuavoCa::Application.routes.draw do
+  match 'certificates/ca(.:format)' => 'certificates#ca', :via => :get, :format => :text
   match 'certificates/revoked_list(.:format)' => 'certificates#revoked_list', :via => :get, :format => :json
   match 'certificates/show_by_fqdn(.:format)' => 'certificates#show_by_fqdn', :via => :get, :format => :json
   match 'certificates/revoke(.:format)' => 'certificates#revoke', :via => :delete, :format => :json

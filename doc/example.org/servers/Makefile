@@ -3,7 +3,6 @@ include ../Makefile.defs
 SERVER_NAMES = $(shell cat LIST)
 
 SERVERS        = $(addsuffix .$(TOPLEVEL_DOMAIN),$(SERVER_NAMES))
-# SERVER_BUNDLES = $(addsuffix -bundle.pem,$(SERVERS))
 SERVER_KEYS    = $(addsuffix .key,$(SERVERS))
 SERVER_CSRS    = $(addsuffix .csr,$(SERVERS))
 SERVER_CRTS    = $(addsuffix .crt,$(SERVERS))
@@ -12,18 +11,27 @@ ROOTCA_CRT = ../rootca/ca.$(TOPLEVEL_DOMAIN).crt
 ROOTCA_KEY = ../rootca/ca.$(TOPLEVEL_DOMAIN).key
 
 SUBCA_DOMAIN = ca.servers.$(TOPLEVEL_DOMAIN)
+SUBCA_BUNDLE = $(SUBCA_DOMAIN)-bundle.pem
 SUBCA_CRT    = $(SUBCA_DOMAIN).crt
 SUBCA_CSR    = $(SUBCA_DOMAIN).csr
 SUBCA_KEY    = $(SUBCA_DOMAIN).key
 
 .INTERMEDIATE: $(SUBCA_CSR)
 
-all: $(OPENSSL_INFRA) $(SUBCA_CRT) $(SUBCA_KEY) $(SERVER_CRTS) $(SERVER_KEYS)
+all: $(OPENSSL_INFRA) $(SUBCA_BUNDLE) $(SUBCA_CRT) $(SUBCA_KEY) \
+     $(SERVER_CRTS) $(SERVER_KEYS)
+
+$(SUBCA_BUNDLE): $(SUBCA_CRT)
+	test ! -e $@
+	cat $(ROOTCA_CRT) $< > $@
+	chown root:root $@
+	chmod 444 $@
+
 
 %.crt: %.csr
 	test ! -e $@
 	openssl ca $(OPENSSL_CONF) -out $@ -cert $(SUBCA_CRT) \
-	  -keyfile $(SUBCA_KEY) -notext -infiles $<
+	  -keyfile $(SUBCA_KEY) -extensions server -notext -infiles $<
 	chown root:root $@
 	chmod 444 $@
 

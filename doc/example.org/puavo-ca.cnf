@@ -184,7 +184,7 @@ basicConstraints=CA:FALSE
 # keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 
 # This will be displayed in Netscape's comment listbox.
-nsComment			= "OpenSSL Generated Certificate"
+nsComment = "Puavo-CA Certificate"
 
 # PKIX recommendations harmless if included in all certificates.
 subjectKeyIdentifier=hash
@@ -206,6 +206,16 @@ authorityKeyIdentifier=keyid,issuer
 #nsRenewalUrl
 #nsCaPolicyUrl
 #nsSslServerName
+
+[ server ]
+
+basicConstraints=CA:FALSE
+nsCertType = server
+nsComment = "Puavo-CA Server Certificate"
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid,issuer:always
+extendedKeyUsage=serverAuth
+keyUsage = digitalSignature, keyEncipherment
 
 [ v3_req ]
 
@@ -286,7 +296,7 @@ basicConstraints=CA:FALSE
 # keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 
 # This will be displayed in Netscape's comment listbox.
-nsComment			= "OpenSSL Generated Certificate"
+nsComment = "Puavo-CA Certificate"
 
 # PKIX recommendations harmless if included in all certificates.
 subjectKeyIdentifier=hash

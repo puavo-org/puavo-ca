@@ -18,8 +18,9 @@ Server CA-certificate is used to sign server certificates.
 
 Edit /etc/puavo-ca/example.org/organisations/LIST to
 contain a list of organisations, separated by newlines.  Edit
-/etc/puavo-ca/example.org/servers/LIST to contain a list of servers,
-again separated by newlines.  You may create the organisation certificates
+/etc/puavo-ca/example.org/servers/SERVERLIST to contain a list of servers,
+again separated by newlines.  Each server line may contain server aliases
+after the certificate name.  You may create the organisation certificates
 and server certificates listed in those files by typing again:
 
 	cd /etc/puavo-ca/example.org && sudo make

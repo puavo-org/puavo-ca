@@ -1,11 +1,11 @@
 include ../Makefile.defs
 
-SERVER_NAMES = $(shell cat LIST)
+SERVER_NAMES = $(shell cat SERVERLIST | awk '{ print $$1 }')
 
-SERVERS        = $(addsuffix .$(TOPLEVEL_DOMAIN),$(SERVER_NAMES))
-SERVER_KEYS    = $(addsuffix .key,$(SERVERS))
-SERVER_CSRS    = $(addsuffix .csr,$(SERVERS))
-SERVER_CRTS    = $(addsuffix .crt,$(SERVERS))
+SERVERS     = $(addsuffix .$(TOPLEVEL_DOMAIN),$(SERVER_NAMES))
+SERVER_KEYS = $(addsuffix .key,$(SERVERS))
+SERVER_CSRS = $(addsuffix .csr,$(SERVERS))
+SERVER_CRTS = $(addsuffix .crt,$(SERVERS))
 
 ROOTCA_CRT = ../rootca/ca.$(TOPLEVEL_DOMAIN).crt
 ROOTCA_KEY = ../rootca/ca.$(TOPLEVEL_DOMAIN).key
@@ -27,18 +27,29 @@ $(SUBCA_BUNDLE): $(SUBCA_CRT)
 	chown root:root $@
 	chmod 444 $@
 
-
 %.crt: %.csr
 	test ! -e $@
+	SUBJECTALTNAME=$$( \
+	  awk -v domain=$(TOPLEVEL_DOMAIN) \
+	    -v host=$(firstword $(subst ., ,$@)) ' \
+	      $$1 == host { \
+	        for (i = 2; i <= NF; i++) { \
+	          printf "DNS:%s.%s%s", $$i, domain, (i != NF ? ", " : "\n") \
+	        } \
+	      } \
+	    ' SERVERLIST); \
+	if [ -n "$$SUBJECTALTNAME" ]; then \
+	  EXTOPT="-extensions subjectAltName"; \
+	fi; \
 	openssl ca $(OPENSSL_CONF) -out $@ -cert $(SUBCA_CRT) \
-	  -keyfile $(SUBCA_KEY) -extensions server -notext -infiles $<
+	  -keyfile $(SUBCA_KEY) -extensions server $$EXTOPT -notext -infiles $<
 	chown root:root $@
 	chmod 444 $@
 
 %.csr: %.key
 	test ! -e $@
-	openssl req $(OPENSSL_CONF) -new -key $< -out $@ \
-	  -subj '/CN=$(subst wildcard.,*.,$(basename $@))/'
+	openssl req $(OPENSSL_CONF) -new -key $< \
+	  -out $@ -subj '/CN=$(subst wildcard.,*.,$(basename $@))/'
 	chown root:root $@
 	chmod 444 $@
 
@@ -50,15 +61,16 @@ $(SUBCA_BUNDLE): $(SUBCA_CRT)
 
 $(SUBCA_CRT): $(SUBCA_CSR)
 	test ! -e $@
-	openssl ca $(OPENSSL_CONF) -out $@ -cert $(ROOTCA_CRT) \
-	  -keyfile $(ROOTCA_KEY) -extensions v3_ca -notext -infiles $<
+	openssl ca $(OPENSSL_CONF) -out $@ \
+	  -cert $(ROOTCA_CRT) -keyfile $(ROOTCA_KEY) -extensions v3_ca \
+	  -notext -infiles $<
 	chown root:root $@
 	chmod 444 $@
 
 $(SUBCA_CSR): $(SUBCA_KEY)
 	test ! -e $@
-	openssl req $(OPENSSL_CONF) -new -key $< -out $@ \
-	  -subj '/CN=$(basename $@)/'
+	openssl req $(OPENSSL_CONF) -new -key $< \
+	  -out $@ -subj '/CN=$(basename $@)/'
 	chown root:root $@
 	chmod 444 $@
 
@@ -70,7 +82,8 @@ $(SUBCA_KEY):
 
 # XXX remove before production!
 clean:
-	rm -f $(SERVER_CRTS) $(SERVER_KEYS) $(SUBCA_CRT) $(SUBCA_KEY)
+	rm -f $(SERVER_CRTS) $(SERVER_KEYS) $(SUBCA_BUNDLE) $(SUBCA_CRT) \
+	  $(SUBCA_KEY)
 	rm -rf workdir
 
 include ../Makefile.targets

@@ -2,3 +2,6 @@ TOPLEVEL_DOMAIN = $(shell basename $$(dirname $$(pwd)))
 
 OPENSSL_CONF  = -config ../puavo-ca.cnf
 OPENSSL_INFRA = workdir workdir/index.txt workdir/newcerts workdir/serial
+
+SUBJECTALTNAME =
+export SUBJECTALTNAME

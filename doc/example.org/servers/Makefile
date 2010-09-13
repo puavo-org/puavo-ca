@@ -1,6 +1,7 @@
 include ../Makefile.defs
 
-SERVER_NAMES = $(shell cat SERVERLIST | awk '{ print $$1 }')
+SERVER_NAMES = $(shell cat SERVERLIST | awk '{ print $$1 }' \
+		   | sed 's/^\*\./wildcard./')
 
 SERVERS     = $(addsuffix .$(TOPLEVEL_DOMAIN),$(SERVER_NAMES))
 SERVER_KEYS = $(addsuffix .key,$(SERVERS))
@@ -31,8 +32,8 @@ $(SUBCA_BUNDLE): $(SUBCA_CRT)
 	test ! -e $@
 	SUBJECTALTNAME=$$( \
 	  awk -v domain=$(TOPLEVEL_DOMAIN) \
-	    -v host=$(firstword $(subst ., ,$@)) ' \
-	      $$1 == host { \
+	    -v fqdn=$(subst wildcard.,*.,$(basename $@)) ' \
+	      $$1 "." domain == fqdn { \
 	        for (i = 2; i <= NF; i++) { \
 	          printf "DNS:%s.%s%s", $$i, domain, (i != NF ? ", " : "\n") \
 	        } \

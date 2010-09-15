@@ -6,6 +6,7 @@ class LdapUser
     begin
       ldap = LDAP::Conn.new(host=PUAVO_CONFIG['ldap_server'])
       ldap.set_option(LDAP::LDAP_OPT_PROTOCOL_VERSION, 3)
+      ldap.start_tls
       return true if ldap.bind(dn, password)
 
       # FIXME:  Allow authetication only if user is School Admin in the some School or organisation owner.

@@ -1,2 +1,2 @@
-certdirpath: /etc/puavo-ca/example.org/organisations
+certdirpath: /etc/puavo-ca/example.org
 ldap_server: ldap.example.org

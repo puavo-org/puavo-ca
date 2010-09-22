@@ -3,9 +3,10 @@ class CertificatesController < ApplicationController
 
   # GET /certificates/ca.text
   def ca
-    
+    @top_level_domain = PUAVO_CONFIG['certdirpath'].match(/([^\/]+)[\/]*$/)[1]
+
     respond_to do |format|
-      format.text  { send_data( File.read("#{ PUAVO_CONFIG['certdirpath'] }/ca.#{ params[:org] }.opinsys.fi-bundle.pem"), :type => 'text/plain' ) }
+      format.text  { send_data( File.read("#{ PUAVO_CONFIG['certdirpath'] }/rootca/ca.#{ @top_level_domain }.crt"), :type => 'text/plain' ) }
     end
   end
 

@@ -13,7 +13,7 @@ class Certificate < ActiveRecord::Base
     hostname, *domain_a = self.fqdn.split('.')
     domain              = domain_a.join('.')
 
-    sub_ca_cert_path = "#{ PUAVO_CONFIG['certdirpath'] }/ca.#{ domain }.crt"
+    sub_ca_cert_path = "#{ PUAVO_CONFIG['certdirpath'] }/organisations/ca.#{ domain }.crt"
     sub_ca_cert_txt  = File.read(sub_ca_cert_path)
     sub_ca_cert      = OpenSSL::X509::Certificate.new(sub_ca_cert_txt)
     sub_ca_key       = key("ca.#{ domain }.key")
@@ -50,7 +50,7 @@ class Certificate < ActiveRecord::Base
 
 private
   def key(name)
-    key = File.read("#{ PUAVO_CONFIG['certdirpath'] }/#{ name }")
+    key = File.read("#{ PUAVO_CONFIG['certdirpath'] }/organisations/#{ name }")
     OpenSSL::PKey::RSA.new(key)
   end
 end

@@ -1,0 +1,2 @@
+certdirpath: /etc/puavo-ca/example.org
+ldap_server: ldap1.example.org

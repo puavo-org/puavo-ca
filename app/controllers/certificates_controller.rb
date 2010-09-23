@@ -1,12 +1,21 @@
 class CertificatesController < ApplicationController
   before_filter :require_http_auth_user, :except => :ca
 
-  # GET /certificates/ca.text
-  def ca
+  # GET /certificates/rootca.text
+  def rootca
     @top_level_domain = PUAVO_CONFIG['certdirpath'].match(/([^\/]+)[\/]*$/)[1]
 
     respond_to do |format|
       format.text  { send_data( File.read("#{ PUAVO_CONFIG['certdirpath'] }/rootca/ca.#{ @top_level_domain }.crt"), :type => 'text/plain' ) }
+    end
+  end
+
+  # GET /certificates/orgcabundle.text
+  def orgcabundle
+    @top_level_domain = PUAVO_CONFIG['certdirpath'].match(/([^\/]+)[\/]*$/)[1]
+
+    respond_to do |format|
+      format.text  { send_data( File.read("#{ PUAVO_CONFIG['certdirpath'] }/organisations/ca.#{ params[:org] }.#{ @top_level_domain }-bundle.pem"), :type => 'text/plain' ) }
     end
   end
 

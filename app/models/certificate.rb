@@ -36,7 +36,7 @@ class Certificate < ActiveRecord::Base
 
     cert.extensions = [
       ext_factory.create_extension('basicConstraints', 'CA:FALSE', true),
-      ext_factory.create_extension('subjectAltName', 'DNS:ldap.opinsys.fi'),
+      ext_factory.create_extension('subjectAltName', "DNS:#{ hostname }.#{ domain }"),
       ext_factory.create_extension('subjectKeyIdentifier', 'hash'),
       ext_factory.create_extension('keyUsage',
 				   'digitalSignature,keyEncipherment'),

@@ -17,6 +17,14 @@ SUBCA_CRT    = $(SUBCA_DOMAIN).crt
 SUBCA_CSR    = $(SUBCA_DOMAIN).csr
 SUBCA_KEY    = $(SUBCA_DOMAIN).key
 
+ifdef SERVER_PASS
+  SERVER_PASSIN  = -batch -passin pass:${SERVER_PASS}
+  SERVER_PASSOUT = -passout pass:${SERVER_PASS}
+endif
+ifdef ROOT_PASS
+  ROOT_PASSIN    = -batch -passin pass:${ROOT_PASS}
+endif
+
 .INTERMEDIATE: $(SUBCA_CSR)
 
 all: $(OPENSSL_INFRA) $(SUBCA_BUNDLE) $(SUBCA_CRT) $(SUBCA_KEY) \
@@ -42,27 +50,27 @@ $(SUBCA_BUNDLE): $(SUBCA_CRT)
 	if [ -n "$$SUBJECTALTNAME" ]; then \
 	  EXTOPT="-extensions subjectAltName"; \
 	fi; \
-	openssl ca $(OPENSSL_CONF) -out $@ -cert $(SUBCA_CRT) \
+	openssl ca ${SERVER_PASSIN} $(OPENSSL_CONF) -out $@ -cert $(SUBCA_CRT) \
 	  -keyfile $(SUBCA_KEY) -extensions server $$EXTOPT -notext -infiles $<
 	chown root:root $@
 	chmod 444 $@
 
 %.csr: %.key
 	test ! -e $@
-	openssl req $(OPENSSL_CONF) -new -key $< \
+	openssl req ${SERVER_PASSIN} $(OPENSSL_CONF) -new -key $< \
 	  -out $@ -subj '/CN=$(subst wildcard.,*.,$(basename $@))/'
 	chown root:root $@
 	chmod 444 $@
 
 %.key:
 	test ! -e $@
-	openssl genrsa -out $@ 4096
+	openssl genrsa ${SERVER_PASSOUT} -out $@ 4096
 	chown root:root $@
 	chmod 400 $@
 
 $(SUBCA_CRT): $(SUBCA_CSR)
 	test ! -e $@
-	openssl ca $(OPENSSL_CONF) -out $@ \
+	openssl ca ${ROOT_PASSIN} $(OPENSSL_CONF) -out $@ \
 	  -cert $(ROOTCA_CRT) -keyfile $(ROOTCA_KEY) -extensions v3_ca \
 	  -notext -infiles $<
 	chown root:root $@
@@ -70,14 +78,14 @@ $(SUBCA_CRT): $(SUBCA_CSR)
 
 $(SUBCA_CSR): $(SUBCA_KEY)
 	test ! -e $@
-	openssl req $(OPENSSL_CONF) -new -key $< \
+	openssl req ${SERVER_PASSIN} $(OPENSSL_CONF) -new -key $< \
 	  -out $@ -subj '/CN=$(basename $@)/'
 	chown root:root $@
 	chmod 444 $@
 
 $(SUBCA_KEY):
 	test ! -e $@
-	openssl genrsa -des3 -out $@ 4096
+	openssl genrsa ${SERVER_PASSOUT} -des3 -out $@ 4096
 	chown root:root $@
 	chmod 400 $@
 

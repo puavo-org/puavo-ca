@@ -10,6 +10,10 @@ CA_CRTS    = $(addsuffix .crt,$(CA_DOMAINS))
 ROOTCA_CRT = ../rootca/ca.$(TOPLEVEL_DOMAIN).crt
 ROOTCA_KEY = ../rootca/ca.$(TOPLEVEL_DOMAIN).key
 
+ifdef ROOT_PASS
+  ROOT_PASSIN    = -batch -passin pass:${ROOT_PASS}
+endif
+
 all: $(OPENSSL_INFRA) $(CA_BUNDLES) $(CA_CRTS) $(CA_KEYS)
 
 %-bundle.pem: %.crt
@@ -20,7 +24,7 @@ all: $(OPENSSL_INFRA) $(CA_BUNDLES) $(CA_CRTS) $(CA_KEYS)
 
 %.crt: %.csr
 	test ! -e $@
-	openssl ca $(OPENSSL_CONF) -out $@ -cert $(ROOTCA_CRT) \
+	openssl ca ${ROOT_PASSIN} $(OPENSSL_CONF) -out $@ -cert $(ROOTCA_CRT) \
 	  -keyfile $(ROOTCA_KEY) -extensions v3_ca -notext -infiles $<
 	chown root:root $@
 	chmod 444 $@

@@ -1,4 +1,4 @@
-TOPLEVEL_DOMAIN = $(shell basename $$(dirname $$(pwd)))
+TOPLEVEL_DOMAIN = $(shell cat /etc/puavo/topdomain)
 
 OPENSSL_CONF  = -config ../puavo-ca.cnf
 OPENSSL_INFRA = workdir workdir/index.txt workdir/newcerts workdir/serial

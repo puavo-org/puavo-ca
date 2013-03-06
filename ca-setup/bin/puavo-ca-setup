@@ -1,0 +1,15 @@
+#!/bin/sh
+
+topdomain=$1
+
+if [ -z "$topdomain" ]; then
+    echo "usage: $(basename $0) <topdomain>"
+    exit 2
+fi
+
+mkdir -p /etc/puavo/
+echo $topdomain > /etc/puavo/topdomain
+echo $(domain) > /etc/puavo-ca/servers/SERVERLIST
+
+cd /etc/puavo-ca/
+make

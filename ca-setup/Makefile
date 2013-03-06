@@ -7,6 +7,8 @@ build:
 
 install-dirs:
 	mkdir -p $(DESTDIR)/etc
+	mkdir -p $(DESTDIR)$(prefix)/bin
+	mkdir -p $(DESTDIR)$(sbindir)
 
 install: install-dirs
 	cp -r etc/puavo-ca $(DESTDIR)/etc

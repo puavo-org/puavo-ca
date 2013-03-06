@@ -1,4 +1,4 @@
-subdirs = ca-setup
+subdirs = puavo-ca-setup
 install-subdirs = $(subdirs:%=install-%)
 clean-subdirs = $(subdirs:%=clean-%)
 

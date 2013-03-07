@@ -4,14 +4,17 @@ organisation=$1
 
 set -eu
 
-if [ -z "$organisation" ]; then
+help () {
     echo "
     usage: $(basename $0) <organisation>
 
     Generate Puavo-CA certificates for given organisation
     "
     exit 2
-fi
+}
+
+[ "$organisation" = "--help" -o "$organisation" = "-h" ] && help
+[ -z "$organisation" ] && help
 
 echo $organisation >> /etc/puavo-ca/organisations/LIST
 cd /etc/puavo-ca/organisations

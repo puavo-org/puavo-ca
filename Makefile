@@ -1,24 +1,15 @@
-subdirs = puavo-ca-setup
-install-subdirs = $(subdirs:%=install-%)
-clean-subdirs = $(subdirs:%=clean-%)
+INSTALL_DIR = $(DESTDIR)$(prefix)/lib/puavo-ca-rails
+BIN_DIR = $(DESTDIR)$(prefix)/bin
 
-.PHONY : all
-all : $(subdirs)
+all: mkdirs gems install
 
-.PHONY : $(subdirs)
-$(subdirs) :
-	$(MAKE) -C $@
+mkdirs:
+	mkdir -p $(INSTALL_DIR) $(BIN_DIR)
 
-.PHONY : $(install-subdirs)
-$(install-subdirs) :
-	$(MAKE) -C $(@:install-%=%) install
+install:
+	echo "INSTALL_DIR=$(INSTALL_DIR)" > $(BIN_DIR)/puavo-ca-paths
+	rsync --archive --exclude=puavo-ca-setup * $(INSTALL_DIR)
 
-.PHONY : install
-install : $(install-subdirs)
+gems:
+	bundle install --deployment
 
-.PHONY : $(clean-subdirs)
-$(clean-subdirs) :
-	$(MAKE) -C $(@:clean-%=%) clean
-
-.PHONY : clean
-clean : $(clean-subdirs)

@@ -28,5 +28,5 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 # group :development, :test do
 #   gem 'webrat'
 # end
-gem 'ruby-debug'
+gem 'debugger'
 gem 'ruby-ldap', :require => 'ldap'

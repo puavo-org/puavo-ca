@@ -29,4 +29,3 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 #   gem 'webrat'
 # end
 gem 'debugger'
-gem 'ruby-ldap', :require => 'ldap'

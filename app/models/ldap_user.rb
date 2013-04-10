@@ -1,3 +1,5 @@
+require 'ldap'
+
 class LdapUser
   def self.authenticate(dn, password)
     logger.debug "Ldap Authentication:"

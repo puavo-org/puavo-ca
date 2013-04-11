@@ -14,3 +14,8 @@ install: mkdirs
 gems:
 	bundle install --standalone --binstubs
 
+clean:
+	rm -r .bundle/ bin/ bundle/
+
+
+

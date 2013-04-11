@@ -12,5 +12,5 @@ install: mkdirs
 	rsync --archive --exclude=puavo-ca-setup .bundle * $(INSTALL_DIR)
 
 gems:
-	bundle install --deployment
+	bundle install --standalone
 

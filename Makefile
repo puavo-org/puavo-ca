@@ -1,3 +1,4 @@
+prefix = /usr/local
 INSTALL_DIR = $(DESTDIR)$(prefix)/lib/puavo-ca-rails
 BIN_DIR = $(DESTDIR)$(prefix)/bin
 

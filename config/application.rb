@@ -12,8 +12,8 @@ module PuavoCa
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     
-    db_path = "/etc/puavo-ca/database.yml"
-    if File.exists?(db_path)
+    if not File.exists?(config.paths.config.database.to_a.first)
+      db_path = "/etc/puavo-ca/database.yml"
       config.paths.config.database = db_path
       STDERR.puts "Using database config from #{ db_path }"
     end

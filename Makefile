@@ -9,7 +9,7 @@ mkdirs:
 
 install: mkdirs
 	echo "INSTALL_DIR=$(INSTALL_DIR)" > $(BIN_DIR)/puavo-ca-paths
-	rsync --archive --exclude=puavo-ca-setup .bundle * $(INSTALL_DIR)
+	rsync --verbose --archive --exclude=puavo-ca-setup .bundle * $(INSTALL_DIR)
 
 gems:
 	bundle install --standalone

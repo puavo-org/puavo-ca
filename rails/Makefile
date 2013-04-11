@@ -1,7 +1,8 @@
 prefix = /usr/local
+sysconfdir = /etc
 INSTALL_DIR = $(DESTDIR)$(prefix)/lib/puavo-ca-rails
 BIN_DIR = $(DESTDIR)$(prefix)/bin
-CONFIG_DIR = $(DESTDIR)$(prefix)/etc/puavo-ca
+CONFIG_DIR = $(DESTDIR)$(sysconfdir)/puavo-ca
 
 all: gems
 

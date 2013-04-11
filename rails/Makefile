@@ -15,7 +15,7 @@ gems:
 	bundle install --standalone --binstubs
 
 clean:
-	rm -r .bundle/ bin/ bundle/
+	rm -rf .bundle/ bin/ bundle/
 
 
 

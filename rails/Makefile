@@ -11,7 +11,7 @@ mkdirs:
 
 install: mkdirs
 	echo "INSTALL_DIR=$(INSTALL_DIR)" > $(BIN_DIR)/puavo-ca-paths
-	cp -r * $(INSTALL_DIR)
+	cp -r * .bundle $(INSTALL_DIR)
 	rm $(INSTALL_DIR)/Gemfile*
 	cp config/database.yml.example $(CONFIG_DIR)/database.yml
 	cp config/puavo.yml.example $(CONFIG_DIR)/puavo.yml

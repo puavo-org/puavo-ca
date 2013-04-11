@@ -12,5 +12,5 @@ install: mkdirs
 	cp -r * $(INSTALL_DIR)
 
 gems:
-	bundle install --standalone
+	bundle install --standalone --binstubs
 

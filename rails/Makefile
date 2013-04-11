@@ -9,8 +9,7 @@ mkdirs:
 
 install: mkdirs
 	echo "INSTALL_DIR=$(INSTALL_DIR)" > $(BIN_DIR)/puavo-ca-paths
-	cp -r * .bundle $(INSTALL_DIR)
-	rm -rf $(INSTALL_DIR)/puavo-ca-setup
+	cp -r * $(INSTALL_DIR)
 
 gems:
 	bundle install --standalone

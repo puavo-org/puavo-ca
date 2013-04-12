@@ -13,7 +13,7 @@ module PuavoCa
     # -- all .rb files in that directory are automatically loaded.
     
     if not File.exists?(config.paths.config.database.to_a.first)
-      db_path = "/etc/puavo-ca/database.yml"
+      db_path = "/etc/puavo-ca-rails/database.yml"
       config.paths.config.database = db_path
       STDERR.puts "Using database config from #{ db_path }"
     end

@@ -1,6 +1,6 @@
 prefix = /usr/local
 sysconfdir = /etc
-INSTALL_DIR = $(DESTDIR)$(prefix)/lib/puavo-ca-rails
+INSTALL_DIR = $(DESTDIR)$(prefix)/share/puavo-ca-rails
 BIN_DIR = $(DESTDIR)$(prefix)/bin
 CONFIG_DIR = $(DESTDIR)$(sysconfdir)/puavo-ca
 

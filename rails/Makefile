@@ -16,7 +16,7 @@ install: mkdirs
 	cp config/puavo.yml.example $(CONFIG_DIR)/puavo.yml
 
 gems:
-	bundle install --standalone --binstubs
+	bundle install --deployment
 
 clean:
 	rm -rf .bundle/ bin/ bundle/

@@ -48,6 +48,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.22)
+    pg (0.15.1)
     polyglot (0.3.3)
     rack (1.2.8)
     rack-mount (0.6.14)
@@ -90,6 +91,7 @@ PLATFORMS
 
 DEPENDENCIES
   debugger
+  pg
   rails (= 3.0.19)
   sqlite3-ruby
   unicorn

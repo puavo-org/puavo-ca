@@ -8,6 +8,7 @@ all: gems
 
 mkdirs:
 	mkdir -p $(INSTALL_DIR) $(BIN_DIR) $(CONFIG_DIR)
+	mkdir -p $(INSTALL_DIR)/tmp
 
 install: mkdirs
 	echo "INSTALL_DIR=$(INSTALL_DIR)" > $(BIN_DIR)/puavo-ca-paths

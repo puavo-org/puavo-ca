@@ -11,12 +11,6 @@ module PuavoCa
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-    
-    if not File.exists?(config.paths.config.database.to_a.first)
-      db_path = "/etc/puavo-ca-rails/database.yml"
-      config.paths.config.database = db_path
-      STDERR.puts "Using database config from #{ db_path }"
-    end
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)

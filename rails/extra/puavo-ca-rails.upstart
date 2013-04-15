@@ -1,3 +1,5 @@
+description "puavo-ca-rails"
+
 start on runlevel [23]
 stop on shutdown
 

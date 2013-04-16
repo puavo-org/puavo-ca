@@ -15,8 +15,8 @@ install: mkdirs
 	cp -r * .bundle $(INSTALL_DIR)
 	cp config/database.yml.example $(CONF_DIR)/database.yml
 	cp config/puavo.yml.example $(CONF_DIR)/puavo.yml
-	ln -s $(CONF_DIR)/database.yml $(RAILS_CONFIG_DIR)/database.yml
-	ln -s $(CONF_DIR)/puavo.yml $(RAILS_CONFIG_DIR)/puavo.yml
+	ln -s ../../../../etc/puavo-ca-rails/database.yml $(RAILS_CONFIG_DIR)/database.yml
+	ln -s ../../../../etc/puavo-ca-rails/puavo.yml $(RAILS_CONFIG_DIR)/puavo.yml
 
 gems:
 	bundle install --deployment

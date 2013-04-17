@@ -39,7 +39,7 @@ all: $(OPENSSL_INFRA) $(CA_BUNDLES) $(CA_CRTS) $(CA_KEYS)
 %.key:
 	test ! -e $@
 	openssl genrsa -out $@ 4096
-	chown root:www-data $@
+	chown root:puavo $@
 	chmod 440 $@
 
 # XXX remove before production!

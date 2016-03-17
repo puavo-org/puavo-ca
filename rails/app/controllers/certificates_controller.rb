@@ -90,4 +90,16 @@ class CertificatesController < ApplicationController
       end
     end
   end
+
+  # DELETE /certificates/test_clean_up
+  def test_clean_up
+    if Rails.env.test?
+      Certificate.find_all_by_organisation("example").each do |certificate|
+        certificate.destroy
+      end
+      render :json => true
+    else
+      render :json => {:error => "internal-server-error"}.to_json, :status => 500
+    end
+  end
 end

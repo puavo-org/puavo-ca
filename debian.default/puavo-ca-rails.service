@@ -1,0 +1,13 @@
+[Unit]
+Description = puavo-ca-rails
+
+[Service]
+WorkingDirectory=/var/app/puavo-ca-rails
+Environment=RAILS_ENV=production
+ExecStart=/usr/bin/bundle exec unicorn_rails -c ./config/unicorn.rb
+User=puavo
+Restart = always
+RestartSec = 120
+
+[Install]
+WantedBy = multi-user.target

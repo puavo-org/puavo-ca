@@ -7,6 +7,12 @@ RAILS_CONFIG_DIR = $(INSTALL_DIR)/config
 
 all: gems
 
+update-gemfile-lock: clean
+	rm -f Gemfile.lock
+	GEM_HOME=.tmpgem bundle install
+	rm -rf .tmpgem
+	bundle install --deployment
+
 mkdirs:
 	mkdir -p $(INSTALL_DIR) $(BIN_DIR) $(RAILS_CONFIG_DIR) $(CONF_DIR)
 	mkdir -p $(INSTALL_DIR)/tmp

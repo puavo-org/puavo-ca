@@ -1,0 +1,17 @@
+# puavo-ca-rails service file.
+# Converted from the old puavo-ca-rails.upstart script.
+
+[Unit]
+Description=puavo-ca in production mode
+After=network-online.target
+
+[Service]
+Type=simple
+User=puavo
+Group=puavo
+WorkingDirectory=/var/app/puavo-ca-rails
+Environment="RACK_ENV=production"
+ExecStart=/usr/bin/bundle exec unicorn_rails -c ./config/unicorn.rb
+
+[Install]
+WantedBy=multi-user.target

@@ -3,7 +3,8 @@ pipeline {
   stages {
     stage('Prepare') {
       steps {
-        sh 'sudo make install-build-deps'
+        sh 'whoami'
+        sh 'make install-build-deps'
       }
     }
     stage('Build') {

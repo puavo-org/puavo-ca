@@ -1,13 +1,9 @@
 pipeline {
-  parameters {
-    string(name: 'DOCKERIMAGE', defaultValue: 'debian:stretch')
-  }
-
   agent {
     docker {
-      image "${params.DOCKERIMAGE}"
-      args '-u root'	// XXX could you do most operations
-			// XXX as normal user?
+      image 'debian:stretch'
+      args '-u root' // XXX could you do most operations
+                     // XXX as normal user?
     }
   }
 

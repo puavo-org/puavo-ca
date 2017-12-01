@@ -21,6 +21,7 @@ $(clean-subdirs):
 	$(MAKE) -C $(@:clean-%=%) clean
 
 .PHONY: install-build-deps
+install-build-deps:
 	mk-build-deps --install --tool 'apt-get --yes' --remove debian/control
 
 .PHONY: deb

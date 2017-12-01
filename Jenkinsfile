@@ -11,6 +11,7 @@ pipeline {
       steps {
         sh '''
           apt-get update
+          apt-get dist-upgrade
           apt-get install -y devscripts dpkg-dev make
           make install-build-deps
         '''

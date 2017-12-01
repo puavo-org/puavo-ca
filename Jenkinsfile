@@ -8,8 +8,8 @@ pipeline {
     stage('Prepare') {
       steps {
         sh '''
-          apt-get update
-          apt-get install devscripts dpkg-dev make
+          sudo apt-get update
+          sudo apt-get install devscripts dpkg-dev make
         '''
       }
     }

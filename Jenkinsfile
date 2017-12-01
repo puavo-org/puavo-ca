@@ -1,17 +1,23 @@
-node {
-  stage('Prepare') {
-    def image = docker.image('debian:stretch')
-    image.withRun('-u root') { c ->
-      image.inside {
+pipeline {
+  agent {
+    docker {
+      image 'debian:stretch'
+    }
+  }
+  stages {
+    stage('Prepare') {
+      steps {
         sh '''
-	  apt-get update
-	  apt-get install devscripts dpkg-dev make
+          apt-get update
+          apt-get install devscripts dpkg-dev make
         '''
       }
     }
-  }
 
-  stage('Build') {
-    sh 'make deb'
+    stage('Build') {
+      steps {
+        sh 'make deb'
+      }
+    }
   }
 }

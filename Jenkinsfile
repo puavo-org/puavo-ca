@@ -6,8 +6,8 @@ pipeline {
   agent {
     docker {
       image "${params.DOCKERIMAGE}"
-      args '-u root'	# XXX could you do most operations
-			# XXX as normal user?
+      args '-u root'	// XXX could you do most operations
+			// XXX as normal user?
     }
   }
 

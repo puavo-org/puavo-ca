@@ -3,7 +3,7 @@ pipeline {
     docker {
       image 'debian:stretch'
       // XXX could you do most operations as normal user?
-      args '-u root -v /var/cache/apt:/var/local/var_cache_apt/stretch'
+      args '-u root --mount source=var_cache_apt_stretch,target=/var/cache/apt'
     }
   }
 

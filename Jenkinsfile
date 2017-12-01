@@ -2,8 +2,8 @@ pipeline {
   agent {
     docker {
       image 'debian:stretch'
-      args '-u root' // XXX could you do most operations
-                     // XXX as normal user?
+      // XXX could you do most operations as normal user?
+      args '-u root -v /var/cache/apt:/var/local/var_cache_apt/stretch'
     }
   }
 

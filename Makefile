@@ -20,6 +20,9 @@ install: $(install-subdirs)
 $(clean-subdirs):
 	$(MAKE) -C $(@:clean-%=%) clean
 
+.PHONY: install-build-deps
+	mk-build-deps --install --tool 'apt-get --yes' --remove debian/control
+
 .PHONY: deb
 deb:
 	[ -e debian/changelog.orig ] \

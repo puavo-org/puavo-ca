@@ -7,10 +7,12 @@ pipeline {
   stages {
     stage('Prepare') {
       steps {
-        sh '''
-          sudo apt-get update
-          sudo apt-get install devscripts dpkg-dev make
-        '''
+        docker.image('debian:stretch').withRun('-u root') { c ->
+          sh '''
+            apt-get update
+            apt-get install devscripts dpkg-dev make
+          '''
+        }
       }
     }
 

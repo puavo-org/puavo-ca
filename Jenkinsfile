@@ -2,7 +2,8 @@ pipeline {
   agent {
     docker {
       image 'debian:stretch'
-      args '-u root'
+      args '-u root'	# XXX could you do most operations
+			# XXX as normal user?
     }
   }
 

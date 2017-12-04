@@ -32,6 +32,10 @@ pipeline {
 
     stage('Upload') {
       steps {
+        withCredentials([file(credentialsId: 'dput.cf',
+                        variable: 'DPUT_CONFIG_FILE')]) {
+          sh 'install -o root -g root -m 644 "$DPUT_CONFIG_FILE" /etc/dput.cf'
+        }
         sh 'make upload-deb'
       }
     }

@@ -38,7 +38,7 @@ deb:
 install-build-deps:
 	mk-build-deps --install --tool 'apt-get --yes' --remove debian/control
 
-.PHONY: upload-debs
-upload-debs:
+.PHONY: upload-deb
+upload-deb:
 	@echo Not implemented yet
 	@exit 1

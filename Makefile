@@ -40,5 +40,4 @@ install-build-deps:
 
 .PHONY: upload-deb
 upload-deb:
-	@echo Not implemented yet
-	@exit 1
+	dput puavo ../puavo-ca_*.changes

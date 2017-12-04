@@ -12,7 +12,8 @@ pipeline {
       steps {
         sh '''
           apt-get update
-          apt-get dist-upgrade
+          apt-get install -y strace
+          strace apt-get dist-upgrade
           apt-get install -y devscripts dpkg-dev make
           make -f Makefile.debian install-build-deps
         '''

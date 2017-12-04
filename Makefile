@@ -21,8 +21,7 @@ $(clean-subdirs):
 	$(MAKE) -C $(@:clean-%=%) clean
 
 .PHONY: test
-	@echo Not implemented yet
-	@exit 1
+	@echo tests not implemented yet
 
 .PHONY: clean
 clean: $(clean-subdirs)

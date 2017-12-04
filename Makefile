@@ -26,3 +26,19 @@ $(clean-subdirs):
 
 .PHONY: clean
 clean: $(clean-subdirs)
+
+.PHONY: deb
+deb:
+	[ -e debian/changelog.orig ] \
+	  || cp -p debian/changelog debian/changelog.orig
+	dch --newversion "$$(cat VERSION)+build$$(date +%s)+$$(git rev-parse HEAD)" "Built from $$(git rev-parse HEAD)"
+	dpkg-buildpackage -us -uc
+
+.PHONY: install-build-deps
+install-build-deps:
+	mk-build-deps --install --tool 'apt-get --yes' --remove debian/control
+
+.PHONY: upload-debs
+upload-debs:
+	@echo Not implemented yet
+	@exit 1

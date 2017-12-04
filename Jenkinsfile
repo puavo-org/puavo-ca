@@ -13,14 +13,14 @@ pipeline {
         sh '''
           apt-get update
           apt-get install -y devscripts dpkg-dev make
-          make -f Makefile.debian install-build-deps
+          make install-build-deps
         '''
       }
     }
 
     stage('Build') {
       steps {
-        sh 'make -f Makefile.debian deb'
+        sh 'make deb'
       }
     }
 
@@ -32,7 +32,7 @@ pipeline {
 
     stage('Upload') {
       steps {
-        sh 'make -f Makefile.debian upload-deb'
+        sh 'make upload-deb'
       }
     }
   }

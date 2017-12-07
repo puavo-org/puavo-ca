@@ -28,10 +28,14 @@ clean: $(clean-subdirs)
 
 .PHONY: deb
 deb:
-	[ -e debian/changelog.orig ] \
-	  || cp -p debian/changelog debian/changelog.orig
-	dch --newversion "$$(cat VERSION)+build$$(date +%s)+$$(git rev-parse HEAD)" "Built from $$(git rev-parse HEAD)"
+	cp -p debian/changelog.vc debian/changelog 2>/dev/null \
+	  || cp -p debian/changelog debian/changelog.vc
+	dch --newversion \
+	    "$$(cat VERSION)+build$$(date +%s)+$$(git rev-parse HEAD)" \
+	    "Built from $$(git rev-parse HEAD)"
+	dch --release ''
 	dpkg-buildpackage -us -uc
+	cp -p debian/changelog.vc debian/changelog
 
 .PHONY: install-build-deps
 install-build-deps:

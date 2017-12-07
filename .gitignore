@@ -1,6 +1,15 @@
 .bundle
 db/*.sqlite3
-debian
+debian/*-build-stamp
+debian/changelog.vc
+debian/.debhelper
+debian/*.debhelper
+debian/files
+debian/*.log
+debian/puavo-ca-rails
+debian/puavo-ca-setup
+debian/*.substvars
+debian/tmp
 log/*.log
 rails/vendor/bundle
 tmp/**/*

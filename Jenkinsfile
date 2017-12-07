@@ -33,10 +33,15 @@ pipeline {
     stage('Upload') {
       steps {
         withCredentials([file(credentialsId: 'dput.cf',
-                        variable: 'DPUT_CONFIG_FILE')]) {
+                              variable: 'DPUT_CONFIG_FILE')]) {
           sh 'install -o root -g root -m 644 "$DPUT_CONFIG_FILE" /etc/dput.cf'
         }
-        sh 'make upload-deb'
+        withCredentials([sshUserPrivateKey(credentialsId: 'puavo-deb-upload',
+                                           keyFileVariable: '',
+                                           passphraseVariable: '',
+                                           usernameVariable: '')]) {
+          sh 'make upload-deb'
+        }
       }
     }
   }

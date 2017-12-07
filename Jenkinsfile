@@ -36,6 +36,13 @@ pipeline {
                               variable: 'DPUT_CONFIG_FILE')]) {
           sh 'install -o root -g root -m 644 "$DPUT_CONFIG_FILE" /etc/dput.cf'
         }
+        withCredentials([file(credentialsId: 'ssh_known_hosts',
+                              variable: 'SSH_KNOWN_HOSTS')]) {
+          sh '''
+            mkdir -m 700 -p ~/.ssh
+            cp -p "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+          '''
+        }
         withCredentials([sshUserPrivateKey(credentialsId: 'puavo-deb-upload',
                                            keyFileVariable: '',
                                            passphraseVariable: '',

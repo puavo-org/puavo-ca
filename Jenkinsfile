@@ -44,9 +44,10 @@ pipeline {
           '''
         }
         withCredentials([sshUserPrivateKey(credentialsId: 'puavo-deb-upload',
-                                           keyFileVariable: '',
+                                           keyFileVariable: 'ID_RSA',
                                            passphraseVariable: '',
                                            usernameVariable: '')]) {
+          sh 'cp -p "$ID_RSA" ~/.ssh/id_rsa'
           sh 'make upload-deb'
         }
       }

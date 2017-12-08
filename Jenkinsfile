@@ -3,7 +3,7 @@ pipeline {
     docker {
       image 'debian:stretch'
       // XXX could you do most operations as normal user?
-      args '-u root'
+      args '-u root --mount type=bind,source=/etc/jenkins-docker-config,destination=/etc/jenkins-docker-config,readonly'
     }
   }
 
@@ -33,24 +33,21 @@ pipeline {
 
     stage('Upload') {
       steps {
-        withCredentials([file(credentialsId: 'dput.cf',
-                              variable: 'DPUT_CONFIG_FILE')]) {
-          sh 'install -o root -g root -m 644 "$DPUT_CONFIG_FILE" /etc/dput.cf'
-        }
-        withCredentials([file(credentialsId: 'ssh_known_hosts',
-                              variable: 'SSH_KNOWN_HOSTS')]) {
-          sh '''
-            mkdir -m 700 -p ~/.ssh
-            cp -p "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
-          '''
-        }
+        sh '''
+          install -o root -g root -m 644 /etc/jenkins-docker-config/dput.cf \
+            /etc/dput.cf
+          install -o root -g root -m 644 \
+            /etc/jenkins-docker-config/ssh_known_hosts \
+            /etc/ssh-docker-config/ssh_known_hosts
+        '''
+
         withCredentials([sshUserPrivateKey(credentialsId: 'puavo-deb-upload',
                                            keyFileVariable: 'ID_RSA',
                                            passphraseVariable: '',
                                            usernameVariable: '')]) {
           sh 'cp -p "$ID_RSA" ~/.ssh/id_rsa'
-          sh 'make upload-deb'
         }
+        sh 'make upload-deb'
       }
     }
   }

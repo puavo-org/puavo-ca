@@ -38,15 +38,13 @@ pipeline {
             /etc/dput.cf
           install -o root -g root -m 644 \
             /etc/jenkins-docker-config/ssh_known_hosts \
-            /etc/ssh-docker-config/ssh_known_hosts
+            /etc/ssh/ssh_known_hosts
+          install -d -o root -g root -m 700 ~/.ssh
+          install -o root -g root -m 600 \
+            /etc/jenkins-docker-config/sshkey_puavo_deb_upload \
+            ~/.ssh/id_rsa
         '''
 
-        withCredentials([sshUserPrivateKey(credentialsId: 'puavo-deb-upload',
-                                           keyFileVariable: 'ID_RSA',
-                                           passphraseVariable: '',
-                                           usernameVariable: '')]) {
-          sh 'cp -p "$ID_RSA" ~/.ssh/id_rsa'
-        }
         sh 'make upload-deb'
       }
     }

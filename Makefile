@@ -2,29 +2,45 @@ subdirs = setup rails
 install-subdirs = $(subdirs:%=install-%)
 clean-subdirs = $(subdirs:%=clean-%)
 
-.PHONY : all
-all : $(subdirs)
+.PHONY: all
+all: $(subdirs)
 
-.PHONY : $(subdirs)
-$(subdirs) :
+.PHONY: $(subdirs)
+$(subdirs):
 	$(MAKE) -C $@
 
-.PHONY : $(install-subdirs)
-$(install-subdirs) :
+.PHONY: $(install-subdirs)
+$(install-subdirs):
 	$(MAKE) -C $(@:install-%=%) install
 
-.PHONY : install
-install : $(install-subdirs)
+.PHONY: install
+install: $(install-subdirs)
 
-.PHONY : $(clean-subdirs)
-$(clean-subdirs) :
+.PHONY: $(clean-subdirs)
+$(clean-subdirs):
 	$(MAKE) -C $(@:clean-%=%) clean
 
-deb:
-	rm -rf debian
-	cp -a debian.default debian
-	dch --newversion "$$(cat VERSION)+build$$(date +%s)" "Built from $$(git rev-parse HEAD)"
-	dpkg-buildpackage -us -uc
+.PHONY: test
+	@echo tests not implemented yet
 
-.PHONY : clean
-clean : $(clean-subdirs)
+.PHONY: clean
+clean: $(clean-subdirs)
+
+.PHONY: deb
+deb:
+	cp -p debian/changelog.vc debian/changelog 2>/dev/null \
+	  || cp -p debian/changelog debian/changelog.vc
+	dch --newversion \
+	    "$$(cat VERSION)+build$$(date +%s)+$$(git rev-parse HEAD)" \
+	    "Built from $$(git rev-parse HEAD)"
+	dch --release ''
+	dpkg-buildpackage -us -uc
+	cp -p debian/changelog.vc debian/changelog
+
+.PHONY: install-build-deps
+install-build-deps:
+	mk-build-deps --install --tool 'apt-get --yes' --remove debian/control
+
+.PHONY: upload-debs
+upload-debs:
+	dput puavo ../puavo-ca_*.changes

@@ -20,5 +20,11 @@ install : $(install-subdirs)
 $(clean-subdirs) :
 	$(MAKE) -C $(@:clean-%=%) clean
 
+deb:
+	rm -rf debian
+	cp -a debian.default debian
+	dch --newversion "$$(cat VERSION)+build$$(date +%s)" "Built from $$(git rev-parse HEAD)"
+	dpkg-buildpackage -us -uc
+
 .PHONY : clean
 clean : $(clean-subdirs)

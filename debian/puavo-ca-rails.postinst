@@ -16,6 +16,8 @@ case "$1" in
         /var/app/puavo-ca-rails/db \
         /var/app/puavo-ca-rails/config/environment.rb \
         /var/app/puavo-ca-rails/config.ru \
+
+	puavo-ca-rails-migrate
     ;;
   abort-upgrade)
     ;;

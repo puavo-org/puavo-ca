@@ -10,7 +10,7 @@ Type=simple
 User=puavo
 Group=puavo
 WorkingDirectory=/var/app/puavo-ca-rails
-Environment="RACK_ENV=production"
+Environment="RAILS_ENV=production"
 ExecStart=/usr/bin/bundle exec unicorn_rails -c ./config/unicorn.rb
 
 [Install]

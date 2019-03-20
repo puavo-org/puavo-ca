@@ -1,3 +1,9 @@
+puavo-ca (0.2.5) stretch; urgency=medium
+
+  * Update to 0.2.5.
+
+ -- Opinsys Oy <dev@opinsys.fi>  Wed, 20 Mar 2019 12:57:07 +0200
+
 puavo-ca (0.2.4) stretch; urgency=medium
 
   * Initial release.

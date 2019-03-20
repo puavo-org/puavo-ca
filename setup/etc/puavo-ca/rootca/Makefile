@@ -12,8 +12,8 @@ all: $(ROOTCA_CRT) $(ROOTCA_KEY)
 
 %.crt: %.key
 	test ! -e $@
-	openssl req ${ROOT_PASSIN} -new -x509 -days 5479 -key $< -out $@ \
-	  -subj '/CN=ca.$(TOPLEVEL_DOMAIN)/'
+	openssl req ${ROOT_PASSIN} -new -x509 -days 5479 -sha512 -key $< \
+	  -out $@ -subj '/CN=ca.$(TOPLEVEL_DOMAIN)/'
 	chown root:puavo $@
 	chmod 444 $@
 

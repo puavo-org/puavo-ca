@@ -24,6 +24,7 @@ all: $(OPENSSL_INFRA) $(CA_BUNDLES) $(CA_CRTS) $(CA_KEYS)
 
 %.crt: %.csr
 	test ! -e $@
+	$(NEW_SERIAL_COMMAND)
 	openssl ca ${ROOT_PASSIN} $(OPENSSL_CONF) -out $@ -cert $(ROOTCA_CRT) \
 	  -keyfile $(ROOTCA_KEY) -extensions v3_ca -notext -infiles $<
 	chown root:root $@

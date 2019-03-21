@@ -3,5 +3,7 @@ TOPLEVEL_DOMAIN = $(shell cat /etc/puavo/topdomain)
 OPENSSL_CONF  = -config ../puavo-ca.cnf
 OPENSSL_INFRA = workdir workdir/index.txt workdir/newcerts workdir/serial
 
+NEW_SERIAL_COMMAND = tr -cd "0-9a-f\n" < /dev/urandom | cut -b 1-16 | awk 'length($$1) == 16 { print; exit(0) }' > workdir/serial
+
 SUBJECTALTNAME =
 export SUBJECTALTNAME

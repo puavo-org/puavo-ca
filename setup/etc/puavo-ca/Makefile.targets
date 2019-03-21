@@ -8,4 +8,4 @@ workdir/newcerts: workdir
 	mkdir -p $@
 
 workdir/serial: workdir
-	test -e $@ || echo 01 > $@
+	test -e $@ || touch $@

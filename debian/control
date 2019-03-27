@@ -2,7 +2,7 @@ Source: puavo-ca
 Section: admin
 Priority: extra
 Maintainer: Esa-Matti Suuronen <esa-matti.suuronen@opinsys.fi>
-Build-Depends: debhelper (>= 8), ruby, ruby-dev, libsqlite3-dev, libpq-dev
+Build-Depends: debhelper (>= 8), ruby, ruby-dev, libsqlite3-dev, libpq-dev, ruby-bundler
 Standards-Version: 3.9.3
 Homepage: https://github.com/opinsys/puavo-ca/
 
@@ -14,6 +14,6 @@ Description: Setup Puavo-CA
 
 Package: puavo-ca-rails
 Architecture: amd64
-Depends: ${shlibs:Depends}, ${misc:Depends}, openssl, make, ruby, ruby-bundler (>= 1.3.5), puavo-client
+Depends: ${shlibs:Depends}, ${misc:Depends}, openssl, make, ruby, ruby-bundler, puavo-client
 Description: Puavo-CA Rails
  Puavo-CA Rails application

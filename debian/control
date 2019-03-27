@@ -10,7 +10,7 @@ Package: puavo-ca-setup
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}, openssl, make, ruby
 Description: Setup Puavo-CA
- Setup certificates and shit for Puavo-CA
+ Setup certificates for Puavo-CA
 
 Package: puavo-ca-rails
 Architecture: amd64

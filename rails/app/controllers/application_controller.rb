@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  before_filter :require_http_auth_user
+  before_action :require_http_auth_user
 
   private
 

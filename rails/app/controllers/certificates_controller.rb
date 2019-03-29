@@ -1,7 +1,7 @@
 require 'puavo/etc'
 
 class CertificatesController < ApplicationController
-  before_filter :require_http_auth_user, :except => [:rootca, :orgcabundle]
+  before_action :require_http_auth_user, :except => [:rootca, :orgcabundle]
 
   # GET /certificates/rootca.text
   def rootca

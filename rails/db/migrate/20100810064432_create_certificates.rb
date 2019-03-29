@@ -1,4 +1,4 @@
-class CreateCertificates < ActiveRecord::Migration
+class CreateCertificates < ActiveRecord::Migration[4.2]
   def self.up
     create_table :certificates do |t|
       t.string :fqdn

@@ -1,4 +1,4 @@
-class AddSerialNumberToCertificate < ActiveRecord::Migration
+class AddSerialNumberToCertificate < ActiveRecord::Migration[4.2]
   def self.up
     add_column :certificates, :serial_number, :integer
   end

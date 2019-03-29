@@ -2,7 +2,7 @@ Source: puavo-ca
 Section: admin
 Priority: extra
 Maintainer: Esa-Matti Suuronen <esa-matti.suuronen@opinsys.fi>
-Build-Depends: debhelper (>= 8), ruby, ruby-dev, libsqlite3-dev, libpq-dev, ruby-bundler
+Build-Depends: debhelper (>= 8), ruby, ruby-dev, libsqlite3-dev, libpq-dev, ruby-bundler, zlib1g-dev
 Standards-Version: 3.9.3
 Homepage: https://github.com/opinsys/puavo-ca/
 

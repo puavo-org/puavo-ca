@@ -28,5 +28,5 @@ gem 'sqlite3'
 #   gem 'webrat'
 # end
 gem 'byebug'
-gem 'unicorn'
+gem 'unicorn', '5.4.1'
 gem 'pg'

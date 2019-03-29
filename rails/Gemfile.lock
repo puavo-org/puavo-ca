@@ -110,7 +110,7 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    unicorn (5.5.0)
+    unicorn (5.4.1)
       kgio (~> 2.6)
       raindrops (~> 0.7)
     websocket-driver (0.7.0)
@@ -125,7 +125,7 @@ DEPENDENCIES
   pg
   rails
   sqlite3
-  unicorn
+  unicorn (= 5.4.1)
 
 BUNDLED WITH
    1.17.3

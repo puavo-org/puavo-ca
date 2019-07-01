@@ -61,7 +61,7 @@ class CertificatesController < ApplicationController
 
   # POST /certificates.json
   def create
-    @certificate = Certificate.new(params[:certificate])
+    @certificate = Certificate.new(certificate_params)
     @certificate.organisation = organisation if organisation
     
     respond_to do |format|
@@ -101,5 +101,10 @@ class CertificatesController < ApplicationController
     else
       render :json => {:error => "internal-server-error"}.to_json, :status => 500
     end
+  end
+
+  private
+  def certificate_params
+    params.require(:certificate).permit(:fqdn, :host_certificate_request)
   end
 end

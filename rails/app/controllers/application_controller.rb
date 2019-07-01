@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery
+  protect_from_forgery with: :exception,
+    unless: Proc.new { |c| c.request.format.json? || c.request.format.xml? }
 
   before_action :require_http_auth_user
 

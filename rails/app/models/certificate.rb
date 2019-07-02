@@ -8,7 +8,9 @@ class Certificate < ActiveRecord::Base
   validates_uniqueness_of :fqdn, :scope => :revoked, :if => Proc.new { |cert| cert.revoked == false }
 
   def sign_certificate
-    self.serial_number = Certificate.maximum( :serial_number, :conditions => [ "organisation = ?", self.organisation ] ).to_i + 1 
+    self.serial_number \
+      = Certificate.where('organisation' => self.organisation) \
+                   .maximum(:serial_number).to_i + 1
     csr = OpenSSL::X509::Request.new(self.host_certificate_request)
     hostname, *domain_a = self.fqdn.split('.')
     domain              = domain_a.join('.')

@@ -42,7 +42,7 @@ class CertificatesController < ApplicationController
     @certificate = Certificate.find(params[:id])
 
     respond_to do |format|
-      format.json  { render :json => @certificate }
+      format.json { render :json => { 'certificate' => @certificate } }
     end
   end
 
@@ -52,9 +52,9 @@ class CertificatesController < ApplicationController
 
     respond_to do |format|
       if @certificate
-        format.json  { render :json => @certificate }
+        format.json { render :json => { 'certificate' => @certificate } }
       else
-        format.json  { render :json => "404 Not Found", :status => :not_found }
+        format.json { render :json => "404 Not Found", :status => :not_found }
       end
     end
   end

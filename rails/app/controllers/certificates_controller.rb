@@ -66,9 +66,10 @@ class CertificatesController < ApplicationController
     
     respond_to do |format|
       if @certificate.save
-        format.json  { render :json => @certificate, :status => :created, :location => @certificate }
+        format.json { render :json   => { 'certificate' => @certificate },
+                             :status => :created }
       else
-        format.json  { render :json => @certificate.errors, :status => :unprocessable_entity }
+        format.json { render :json => @certificate.errors, :status => :unprocessable_entity }
       end
     end
   end

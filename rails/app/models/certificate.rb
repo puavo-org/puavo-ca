@@ -46,7 +46,7 @@ class Certificate < ActiveRecord::Base
 				   'serverAuth,clientAuth,emailProtection'),
     ]
 
-    cert.sign(sub_ca_key, OpenSSL::Digest::SHA1.new)
+    cert.sign(sub_ca_key, OpenSSL::Digest::SHA512.new)
     self.certificate = cert.to_pem
   end
 

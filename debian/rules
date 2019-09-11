@@ -21,6 +21,8 @@ override_dh_auto_install:
 	$(MAKE) -C rails install prefix=/usr sysconfdir=/etc DESTDIR=$(CURDIR)/debian/puavo-ca-rails
 	$(MAKE) -C setup install prefix=/usr sysconfdir=/etc DESTDIR=$(CURDIR)/debian/puavo-ca-setup
 
+override_dh_compress:
+
 PACKAGE = $(shell dpkg-parsechangelog | sed -ne 's/^Source: //p')
 SRC_VERSION := $(shell dpkg-parsechangelog | sed -ne 's/^Version: \(\([0-9]\+\):\)\?\(.*\)-.*/\3/p')
 TARBALL = $(PACKAGE)_$(SRC_VERSION).orig.tar.gz

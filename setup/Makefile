@@ -1,17 +1,22 @@
-
 prefix = /usr/local
 exec_prefix = $(prefix)
+datarootdir = $(prefix)/share
 sbindir = $(exec_prefix)/sbin
 
-build:
+.PHONY: all
+all:
 
+.PHONY: install-dirs
 install-dirs:
-	mkdir -p $(DESTDIR)/etc
-	mkdir -p $(DESTDIR)$(prefix)/bin
-	mkdir -p $(DESTDIR)$(sbindir)
+	mkdir -p $(DESTDIR)${datarootdir}/doc/puavo-ca/examples
+	mkdir -p $(DESTDIR)${sbindir}
 
+.PHONY: install
 install: install-dirs
-	cp -r etc/puavo-ca $(DESTDIR)/etc
+	cp -R certchain \
+	      $(DESTDIR)${datarootdir}/doc/puavo-ca/examples/certchain
+	install -o root -g root -m 755 \
+		-t $(DESTDIR)$(sbindir) bin/puavo-make-new-ca-chain
 
+.PHONY: clean
 clean:
-

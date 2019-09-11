@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -eu
+
+cert_version=$(date +%Y%m%d)
+
+cert_version_dir="/etc/puavo-ca/certificates/${cert_version}"
+
+if [ -d "$cert_version_dir" ]; then
+  echo "Directory /etc/puavo-ca/${cert_version} already exists!" >&2
+  exit 1
+fi
+
+mkdir -p /etc/puavo-ca
+rm -rf "${cert_version_dir}.tmp"
+cp -a /usr/share/doc/puavo-ca/examples/certchain "${cert_version_dir}.tmp"
+mv "${cert_version_dir}.tmp" "$cert_version_dir"

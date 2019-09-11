@@ -1,5 +1,4 @@
 .bundle
-db/*.sqlite3
 debian/*-build-stamp
 debian/changelog
 debian/.debhelper
@@ -10,6 +9,7 @@ debian/puavo-ca-rails
 debian/puavo-ca-setup
 debian/*.substvars
 debian/tmp
-log/*.log
+rails/db/*.sqlite3
+rails/log/*.log
 rails/vendor/bundle
-tmp/**/*
+rails/tmp/**/*

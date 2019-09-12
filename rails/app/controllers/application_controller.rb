@@ -14,8 +14,4 @@ class ApplicationController < ActionController::Base
       render :json => "401 Unauthorized.", :status => :unauthorized
     end
   end
-  
-  def organisation
-    @organisation ||= params[:org] || nil
-  end
 end

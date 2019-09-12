@@ -5,16 +5,12 @@ class CertificatesController < ApplicationController
 
   # GET /certificates/rootca.text
   def rootca
-    version = params[:version]
     return render_badparam('bad format in version parameter') \
-      unless version.nil? || version.match(/\A\d+\z/)
-
-    cert_subpath = "rootca/ca.#{ PUAVO_ETC.topdomain }.crt"
+      unless params[:version].nil? || params[:version].match(/\A\d+\z/)
 
     respond_to do |format|
       format.text do
-        send_data(get_cert(cert_subpath, version),
-                  :type => 'text/plain')
+        send_data(get_rootca(params[:version]), :type => 'text/plain')
       end
     end
   end
@@ -29,12 +25,9 @@ class CertificatesController < ApplicationController
     return render_badparam('bad format in version parameter') \
       unless version.nil? || version.match(/\A\d+\z/)
 
-    topdomain = PUAVO_ETC.topdomain
-    cert_subpath = "organisations/ca.#{ org }.#{ topdomain }-bundle.pem"
-
     respond_to do |format|
       format.text do
-        send_data(get_cert(cert_subpath, version),
+        send_data(get_org_ca_certificate_bundle(org, version),
                   :type => 'text/plain')
       end
     end
@@ -55,24 +48,34 @@ class CertificatesController < ApplicationController
 
   # POST /certificates.json
   def create
-    @certificate = Certificate.new(certificate_params)
-    @certificate.organisation = organisation if organisation
-    
+    return render_badparam('bad format in organisation parameter') \
+      unless params[:org].match(/\A\w+\z/)
+    params[:version] = version_or_default(params[:version]) \
+      if params[:version].nil?
+
+    certificate = Certificate.new(certificate_params)
+   
     respond_to do |format|
-      if @certificate.save
+      if certificate.save then
         format.json do
-          render :json   => { 'certificate' => @certificate },
-                 :status => :created
+          org_ca_certificate_bundle \
+            = get_org_ca_certificate_bundle(params[:org], params[:version])
+          render :json => {
+            'certificate'               => certificate,
+            'org_ca_certificate_bundle' => org_ca_certificate_bundle,
+            'root_ca_certificate'       => get_rootca(params[:version]),
+          }, :status => :created
         end
       else
         format.json do
-          render :json   => @certificate.errors,
+          render :json   => certificate.errors,
                  :status => :unprocessable_entity
         end
       end
     end
   end
 
+  # XXX version parameter?
   # DELETE /certificates/1.json
   def revoke
     if @certificate = Certificate.find_by_fqdn_and_revoked(params[:fqdn], false)
@@ -107,22 +110,39 @@ class CertificatesController < ApplicationController
   private
 
   def certificate_params
-    params.require(:certificate).permit(:fqdn, :host_certificate_request)
+    params.require(:certificate).permit(:fqdn,
+                                        :host_certificate_request,
+                                        :organisation,
+                                        :version)
   end
 
-  def get_cert(cert_subpath, version)
-    if version.nil? then
-      version = PUAVO_CONFIG['default_certchain_version']
-      raise 'no certchain version' if version.nil?
-    end
+  def get_cert(cert_subpath, maybe_version)
+    version = version_or_default(maybe_version)
 
     certdir  = "#{ PUAVO_CONFIG['certdirpath'] }/#{ version }"
     certpath = "#{ certdir }/#{ cert_subpath }"
     File.read(certpath)
   end
 
+  def get_org_ca_certificate_bundle(org, version)
+    topdomain = PUAVO_ETC.topdomain
+    cert_subpath = "organisations/ca.#{ org }.#{ topdomain }-bundle.pem"
+    get_cert(cert_subpath, version)
+  end
+
+  def get_rootca(version)
+    get_cert("rootca/ca.#{ PUAVO_ETC.topdomain }.crt", version)
+  end
+
   def render_badparam(errmsg)
     render :json   => { :error => errmsg }.to_json,
            :status => 400
+  end
+
+  def version_or_default(maybe_version)
+    return maybe_version if maybe_version
+    version = PUAVO_CONFIG['default_certchain_version']
+    raise 'no certchain version' if version.nil?
+    return version
   end
 end

@@ -4,12 +4,15 @@ class Certificate < ActiveRecord::Base
   attr_accessor :host_certificate_request
   before_create :sign_certificate
 
-  validates_presence_of :organisation
-  validates_uniqueness_of :fqdn, :scope => :revoked, :if => Proc.new { |cert| cert.revoked == false }
+  validates :fqdn, :uniqueness => true,
+                   :scope      => :revoked,
+                   :if         => Proc.new { |cert| cert.revoked == false }
+  validates :organisation, :precense => true
+  validates :version, :format => { with: /\A\d+\z/ }
 
   def sign_certificate
     self.serial_number \
-      = Certificate.where('organisation' => self.organisation) \
+      = Certificate.where(:organisation => self.organisation) \
                    .maximum(:serial_number).to_i + 1
     csr = OpenSSL::X509::Request.new(self.host_certificate_request)
     hostname, *domain_a = self.fqdn.split('.')
@@ -27,7 +30,7 @@ class Certificate < ActiveRecord::Base
     cert.not_after  = Time.now + 3 * 365 * 24 * 60 * 60
     cert.not_before = Time.now - 24 * 60 * 60
     cert.serial     = self.serial_number
-    cert.version = 2
+    cert.version    = 2
 
     cert.public_key = csr.public_key
     cert.issuer = sub_ca_cert.subject

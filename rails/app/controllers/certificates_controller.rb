@@ -42,13 +42,13 @@ class CertificatesController < ApplicationController
 
   # GET /certificates/show_by_fqdn.json
   def show_by_fqdn
-    @certificate = Certificate.find_by_fqdn_and_revoked(params[:fqdn], false)
-
+    certificates = Certificate.where(:fqdn    => params[:fqdn],
+                                     :revoked => false)
     respond_to do |format|
-      if @certificate
-        format.json { render :json => { 'certificate' => @certificate } }
-      else
+      if certificates.empty? then
         format.json { render :json => '404 Not Found', :status => :not_found }
+      else
+        format.json { render :json => { 'certificates' => certificates } }
       end
     end
   end

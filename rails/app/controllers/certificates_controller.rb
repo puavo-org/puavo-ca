@@ -40,38 +40,6 @@ class CertificatesController < ApplicationController
     end
   end
 
-  # XXX what is this used for?  each device in an organisation can get a list
-  # XXX of all certificates for all organisations???? (if also puavo-rest
-  # XXX would allow such a call)
-  # GET /certificates.json
-  def index
-    @certificates = Certificate.all
-
-    respond_to do |format|
-      format.json { render :json => @certificates }
-    end
-  end
-
-  # XXX is this used for something?
-  # GET /certificates/revoked_list.json
-  def revoked_list
-    @certificates = Certificate.where(:revoked => true)
-    
-    respond_to do |format|
-      format.json { render :json => @certificates }
-    end
-  end
-
-  # XXX is this used for something?
-  # GET /certificates/1.json
-  def show
-    @certificate = Certificate.find(params[:id])
-
-    respond_to do |format|
-      format.json { render :json => { 'certificate' => @certificate } }
-    end
-  end
-
   # GET /certificates/show_by_fqdn.json
   def show_by_fqdn
     @certificate = Certificate.find_by_fqdn_and_revoked(params[:fqdn], false)

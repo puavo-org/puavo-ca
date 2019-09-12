@@ -75,21 +75,24 @@ class CertificatesController < ApplicationController
     end
   end
 
-  # XXX version parameter?
   # DELETE /certificates/1.json
   def revoke
-    if @certificate = Certificate.find_by_fqdn_and_revoked(params[:fqdn], false)
-      @certificate.revoked = true
-      @certificate.revoked_at = Time.now
-      @certificate.revoked_user = session[:dn]
-      @certificate.save
+    where_args = { :fqdn => params[:fqdn], :revoked => false }
+    where_args[:version] = params[:version] unless params[:version].nil?
+
+    certificates_to_revoke = Certificate.where(where_args)
+    certificates_to_revoke.each do |cert|
+      cert.revoked      = true
+      cert.revoked_at   = Time.now
+      cert.revoked_user = session[:dn]
+      cert.save!
     end
 
     respond_to do |format|
-      if @certificate
-        format.json { head :ok }
-      else
+      if certificates_to_revoke.empty? then
         format.json { render :json => '404 Not Found', :status => :not_found }
+      else
+        format.json { head :ok }
       end
     end
   end

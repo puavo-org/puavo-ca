@@ -4,10 +4,9 @@ class Certificate < ActiveRecord::Base
   attr_accessor :host_certificate_request
   before_create :sign_certificate
 
-  validates :fqdn, :uniqueness => true,
-                   :scope      => :revoked,
-                   :if         => Proc.new { |cert| cert.revoked == false }
-  validates :organisation, :precense => true
+  validates :fqdn, :uniqueness => { :scope => :revoked },
+                   :unless     => Proc.new { |cert| cert.revoked }
+  validates :organisation, :presence => true
   validates :version, :format => { with: /\A\d+\z/ }
 
   def sign_certificate

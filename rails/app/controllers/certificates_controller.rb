@@ -39,9 +39,12 @@ class CertificatesController < ApplicationController
                                      :revoked => false)
     respond_to do |format|
       if certificates.empty? then
-        format.json { render :json => '404 Not Found', :status => :not_found }
+        format.json do
+          render :json   => { :error => 'certificates not found' },
+                 :status => :not_found
+        end
       else
-        format.json { render :json => { 'certificates' => certificates } }
+        format.json { render :json => { :certificates => certificates } }
       end
     end
   end
@@ -69,7 +72,8 @@ class CertificatesController < ApplicationController
         end
       else
         format.json do
-          render :json   => certificate.errors,
+          errmsg = certificate.errors.full_messages.join(' / ')
+          render :json   => { :error => errmsg },
                  :status => :unprocessable_entity
         end
       end
@@ -91,7 +95,10 @@ class CertificatesController < ApplicationController
 
     respond_to do |format|
       if certificates_to_revoke.empty? then
-        format.json { render :json => '404 Not Found', :status => :not_found }
+        format.json do
+          render :json   => { :error => 'certificates not found' },
+                 :status => :not_found
+        end
       else
         format.json { head :ok }
       end
@@ -106,7 +113,7 @@ class CertificatesController < ApplicationController
       end
       render :json => true
     else
-      render :json   => { :error => 'internal-server-error'}.to_json,
+      render :json   => { :error => 'internal-server-error' },
              :status => 500
     end
   end

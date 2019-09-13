@@ -11,6 +11,9 @@ class Certificate < ActiveRecord::Base
   validates :version, :format => { with: /\A\d+\z/ }, :presence => true
 
   def sign_certificate
+    raise 'no such certificate chain version' \
+      unless File.directory?(versioned_certdir)
+
     self.serial_number \
       = Certificate.where(:organisation => self.organisation) \
                    .maximum(:serial_number).to_i + 1
@@ -18,8 +21,13 @@ class Certificate < ActiveRecord::Base
     hostname, *domain_a = self.fqdn.split('.')
     domain              = domain_a.join('.')
 
-    sub_ca_cert_txt = get_org_ca_file(domain, 'crt')
-    sub_ca_key_txt  = get_org_ca_file(domain, 'key')
+    begin
+      sub_ca_cert_txt = get_org_ca_file(domain, 'crt')
+      sub_ca_key_txt  = get_org_ca_file(domain, 'key')
+    rescue StandardError => e
+      raise 'could not read organisation certificates for certificate chain' \
+              + " version #{ self.version }: #{ e.message }"
+    end
 
     sub_ca_cert = OpenSSL::X509::Certificate.new(sub_ca_cert_txt)
     sub_ca_key  = OpenSSL::PKey::RSA.new(sub_ca_key_txt)
@@ -55,11 +63,14 @@ class Certificate < ActiveRecord::Base
   end
 
 private
+  def versioned_certdir
+    File.join(PUAVO_CONFIG['certdirpath'], self.version)
+  end
+
   def get_org_ca_file(domain, suffix)
-    organisation_ca_file_path = File.join(PUAVO_CONFIG['certdirpath'],
-                                       self.version,
-                                       'organisations',
-                                       "ca.#{ domain }.#{ suffix }")
+    organisation_ca_file_path = File.join(versioned_certdir,
+                                          'organisations',
+                                          "ca.#{ domain }.#{ suffix }")
     return File.read(organisation_ca_file_path)
   end
 end

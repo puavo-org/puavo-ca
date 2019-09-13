@@ -2,8 +2,7 @@ require 'ldap'
 
 class LdapUser
   def self.authenticate(dn, password)
-    logger.debug "Ldap Authentication:"
-    logger.debug "dn: #{dn}"
+    logger.debug "Ldap Authentication with dn: #{ dn }"
 
     begin
       ldap = LDAP::Conn.new(host=PUAVO_CONFIG['ldap_server'])

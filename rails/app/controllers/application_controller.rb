@@ -4,6 +4,11 @@ class ApplicationController < ActionController::Base
 
   before_action :require_http_auth_user
 
+  rescue_from StandardError do |e|
+    render :json   => { :error => e.message },
+           :status => 500
+  end
+
   private
 
   def require_http_auth_user

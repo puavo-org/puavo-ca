@@ -48,22 +48,23 @@ class CertificatesController < ApplicationController
 
   # POST /certificates.json
   def create
-    return render_badparam('bad format in organisation parameter') \
-      unless params[:org].match(/\A\w+\z/)
-    params[:version] = version_or_default(params[:version]) \
-      if params[:version].nil?
+    return render_badparam('certificate parameter is missing') \
+      unless params[:certificate]
+    params[:certificate][:version] \
+      = version_or_default(params[:certificate][:version])
 
     certificate = Certificate.new(certificate_params)
-   
+
     respond_to do |format|
       if certificate.save then
         format.json do
           org_ca_certificate_bundle \
-            = get_org_ca_certificate_bundle(params[:org], params[:version])
+            = get_org_ca_certificate_bundle(certificate.organisation,
+                                            certificate.version)
           render :json => {
-            'certificate'               => certificate,
+            'certificate'               => certificate.certificate,
             'org_ca_certificate_bundle' => org_ca_certificate_bundle,
-            'root_ca_certificate'       => get_rootca(params[:version]),
+            'root_ca_certificate'       => get_rootca(certificate.version),
           }, :status => :created
         end
       else

@@ -4,15 +4,17 @@ class Certificate < ActiveRecord::Base
   attr_accessor :host_certificate_request
   before_create :sign_certificate
 
-  validates :fqdn, :presence => true,
-                   :uniqueness => { :scope => [ :revoked, :version ] },
+  validates :fqdn, :presence   => true,
+                   :uniqueness => { :scope => [ :certchain_version,
+                                                :revoked ] },
                    :unless     => Proc.new { |cert| cert.revoked }
   validates :organisation, :presence => true
-  validates :version, :format => { with: /\A\d+\z/ }, :presence => true
+  validates :certchain_version, :format => { with: /\A\d+\z/ },
+                                :presence => true
 
   def sign_certificate
     raise 'no such certificate chain version' \
-      unless File.directory?(versioned_certdir)
+      unless File.directory?(certchain_versioned_certdir)
 
     self.serial_number \
       = Certificate.where(:organisation => self.organisation) \
@@ -26,7 +28,7 @@ class Certificate < ActiveRecord::Base
       sub_ca_key_txt  = get_org_ca_file(domain, 'key')
     rescue StandardError => e
       raise 'could not read organisation certificates for certificate chain' \
-              + " version #{ self.version }: #{ e.message }"
+              + " version #{ self.certchain_version }: #{ e.message }"
     end
 
     sub_ca_cert = OpenSSL::X509::Certificate.new(sub_ca_cert_txt)
@@ -63,12 +65,12 @@ class Certificate < ActiveRecord::Base
   end
 
 private
-  def versioned_certdir
-    File.join(PUAVO_CONFIG['certdirpath'], self.version)
+  def certchain_versioned_certdir
+    File.join(PUAVO_CONFIG['certdirpath'], self.certchain_version)
   end
 
   def get_org_ca_file(domain, suffix)
-    organisation_ca_file_path = File.join(versioned_certdir,
+    organisation_ca_file_path = File.join(certchain_versioned_certdir,
                                           'organisations',
                                           "ca.#{ domain }.#{ suffix }")
     return File.read(organisation_ca_file_path)

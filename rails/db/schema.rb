@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2019_09_11_110606) do
     t.datetime "updated_at"
     t.string "organisation"
     t.integer "serial_number"
-    t.string "version"
+    t.string "certchain_version"
   end
 
 end

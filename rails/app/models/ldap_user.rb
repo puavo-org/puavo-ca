@@ -1,19 +1,34 @@
-require 'ldap'
+require 'net/ldap'
 
 class LdapUser
-  def self.authenticate(dn, password)
+  def self.authenticate_and_get_user(dn, password)
     logger.debug "Ldap Authentication with dn: #{ dn }"
 
+    return nil if password == ''
+
     begin
-      ldap = LDAP::Conn.new(host=PUAVO_CONFIG['ldap_server'])
-      ldap.set_option(LDAP::LDAP_OPT_PROTOCOL_VERSION, 3)
-      ldap.start_tls
-      return true if ldap.bind(dn, password)
+      ldap = Net::LDAP.new(:host => PUAVO_CONFIG['ldap_server'],
+                           :auth => {
+                             :method   => :simple,
+                             :username => dn,
+                             :password => password,
+                           },
+                           :encryption => {
+                             :method => :start_tls,
+                             :tls_options => {
+                               :verify_mode => OpenSSL::SSL::VERIFY_NONE,
+                             }
+                           })
+
+      user_info = ldap.search(:base => dn)
+      return nil unless user_info && user_info.count == 1
+
+      return user_info.first
     rescue StandardError => e
       logger.info "Authentication failed: #{ e.message }"
     end
 
-    return false
+    return nil
   end
 
   private

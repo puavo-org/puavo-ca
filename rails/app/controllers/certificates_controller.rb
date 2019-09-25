@@ -58,6 +58,12 @@ class CertificatesController < ApplicationController
     params[:certificate][:certchain_version] \
       = certchain_version_or_default(params[:certificate][:certchain_version])
 
+    if @client_fqdn && @client_fqdn != params[:certificate][:fqdn] then
+      render :json   => { :error => 'no permission (bad fqdn)' },
+             :status => :unauthorized
+      return
+    end
+
     certificate = Certificate.new(certificate_params)
 
     respond_to do |format|

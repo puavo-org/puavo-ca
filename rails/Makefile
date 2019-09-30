@@ -38,4 +38,4 @@ server:
 
 .PHONY: clean
 clean:
-	rm -rf .bundle/ bin/ bundle/
+	rm -rf .bundle/ bundle/

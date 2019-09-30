@@ -138,7 +138,7 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    unicorn (5.4.1)
+    unicorn (5.5.1)
       kgio (~> 2.6)
       raindrops (~> 0.7)
     web-console (4.0.1)
@@ -162,7 +162,7 @@ DEPENDENCIES
   puma
   rails
   sqlite3
-  unicorn (= 5.4.1)
+  unicorn
   web-console
 
 BUNDLED WITH

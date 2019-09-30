@@ -23,10 +23,10 @@ mkdirs:
 .PHONY: install
 install: mkdirs
 	cp -r * .bundle $(INSTALL_DIR)
-	cp config/database.yml.example $(CONF_DIR)/database.yml
-	cp config/puavo.yml.example $(CONF_DIR)/puavo.yml
-	ln -s ../../../../etc/puavo-ca-rails/database.yml $(RAILS_CONFIG_DIR)/database.yml
-	ln -s ../../../../etc/puavo-ca-rails/puavo.yml $(RAILS_CONFIG_DIR)/puavo.yml
+	cp config/database.yml $(CONF_DIR)/database.yml
+	cp config/puavo.yml $(CONF_DIR)/puavo.yml
+	ln -fns ../../../../etc/puavo-ca-rails/database.yml $(RAILS_CONFIG_DIR)/database.yml
+	ln -fns ../../../../etc/puavo-ca-rails/puavo.yml $(RAILS_CONFIG_DIR)/puavo.yml
 
 .PHONY: gems
 gems:

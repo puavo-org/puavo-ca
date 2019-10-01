@@ -2,7 +2,15 @@
 
 set -eu
 
-certchain_version=$(date +%Y%m%d)
+certchain_version=${1:-}
+if [ -z "$certchain_version" ]; then
+  certchain_version=$(date +%Y%m%d)
+fi
+
+if ! printf %s "$certchain_version" | grep -Eqx '[[:digit:]]+'; then
+  echo 'certchain version must be a string of numbers' >&2
+  exit 1
+fi
 
 certchain_version_dir="/etc/puavo-ca/certificates/${certchain_version}"
 

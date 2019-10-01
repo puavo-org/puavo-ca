@@ -34,7 +34,7 @@ server certificate.
 
 You should also tell the web software the path to look for organisation
 certificates by configuring in `<rails root>/config/puavo.yml` the parameter
-`certdirpath` to point to `/etc/puavo-ca/organisations`.  Puavo-CA will use the
+`certdirpath` to point to `/etc/puavo-ca/certificates`.  Puavo-CA will use the
 organisation certificates to sign the host certificate requests that are sent
-to it.
-
+to it.  Also setting up `default_certchain_version` to some certificate chain
+version under /etc/puavo-ca/certificates might be a good idea.

@@ -1,3 +1,3 @@
 certdirpath: /etc/puavo-ca/certificates
-default_certchain_version: 20101001
+default_certchain_version:
 ldap_server:

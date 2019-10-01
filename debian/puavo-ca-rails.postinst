@@ -13,7 +13,7 @@ case "$1" in
     (
       cd /var/app/puavo-ca-rails
       if [ ! -e config/master.key ]; then
-        env EDITOR=true rails credentials:edit
+        env EDITOR=true ./bin/rails credentials:edit
       fi
     )
     chown root:puavo /var/app/puavo-ca-rails/config/master.key

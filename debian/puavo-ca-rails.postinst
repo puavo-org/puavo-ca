@@ -8,14 +8,20 @@ set -e
 
 case "$1" in
   configure)
-      adduser --no-create-home --disabled-password --disabled-login --system --group puavo
+    adduser --no-create-home --disabled-password --disabled-login --system --group puavo
 
-      chown -R puavo:puavo \
-        /var/app/puavo-ca-rails/tmp \
-        /var/app/puavo-ca-rails/log \
-        /var/app/puavo-ca-rails/db \
-        /var/app/puavo-ca-rails/config/environment.rb \
-        /var/app/puavo-ca-rails/config.ru \
+    (
+      cd /var/app/puavo-ca-rails
+      if [ ! -e config/master.key ]; then
+        env EDITOR=true rails credentials:edit
+      fi
+    )
+    chown root:puavo /var/app/puavo-ca-rails/config/master.key
+    chmod 640 /var/app/puavo-ca-rails/config/master.key
+
+    chown -R puavo:puavo /var/app/puavo-ca-rails/db  \
+                         /var/app/puavo-ca-rails/log \
+                         /var/app/puavo-ca-rails/tmp
     ;;
   abort-upgrade)
     ;;

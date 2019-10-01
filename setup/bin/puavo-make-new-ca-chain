@@ -11,7 +11,7 @@ if [ -d "$certchain_version_dir" ]; then
   exit 1
 fi
 
-mkdir -p /etc/puavo-ca
+mkdir -p /etc/puavo-ca/certificates
 rm -rf "${certchain_version_dir}.tmp"
 cp -a /usr/share/doc/puavo-ca/examples/certchain "${certchain_version_dir}.tmp"
 mv "${certchain_version_dir}.tmp" "$certchain_version_dir"

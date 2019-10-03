@@ -14,9 +14,11 @@ class Certificate < ActiveRecord::Base
   validate :validate_certchain_version
 
   def validate_certchain_version
-    errors.add(:certchain_version,
-               "no chain version: #{ self.certchain_version }") \
-      unless File.directory?(certchain_versioned_certdir)
+    if self.certchain_version \
+         && !File.directory?(certchain_versioned_certdir) then
+      errors.add(:certchain_version,
+                 "no chain version: #{ self.certchain_version }")
+    end
   end
 
   def sign_certificate

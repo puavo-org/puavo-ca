@@ -11,17 +11,11 @@ class Certificate < ActiveRecord::Base
   validates :organisation, :presence => true
   validates :certchain_version, :format => { with: /\A\d+\z/ },
                                 :presence => true
-  validate :validate_certchain_version
-
-  def validate_certchain_version
-    if self.certchain_version \
-         && !File.directory?(certchain_versioned_certdir) then
-      errors.add(:certchain_version,
-                 "no chain version: #{ self.certchain_version }")
-    end
-  end
 
   def sign_certificate
+    raise 'no such certificate chain version' \
+      unless File.directory?(certchain_versioned_certdir)
+
     self.serial_number \
       = Certificate.where(:organisation => self.organisation) \
                    .maximum(:serial_number).to_i + 1

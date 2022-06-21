@@ -14,6 +14,6 @@ end
 gem 'net-ldap'
 gem 'pg'
 gem 'puma'
-gem 'rails'
+gem 'rails', '6.1.6'
 gem 'sqlite3'
 gem 'unicorn'

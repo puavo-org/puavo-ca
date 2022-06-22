@@ -160,7 +160,6 @@ DEPENDENCIES
   pg
   puma
   rails (= 6.1.6)
-  rake
   sqlite3
   unicorn
   web-console

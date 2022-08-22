@@ -30,10 +30,12 @@ clean: $(clean-subdirs)
 deb:
 	cp -p debian/changelog.vc debian/changelog 2>/dev/null \
 	  || cp -p debian/changelog debian/changelog.vc
-	dch --newversion \
+	env DEBFULLNAME="Puavo Org" DEBEMAIL="dev@opinsys.fi" \
+	  dch --newversion \
 	    "$$(cat VERSION)+build$$(date +%s)+$$(git rev-parse HEAD)" \
 	    "Built from $$(git rev-parse HEAD)"
-	dch --release ''
+	env DEBFULLNAME="Puavo Org" DEBEMAIL="dev@opinsys.fi" \
+	  dch --release ''
 	dpkg-buildpackage -us -uc
 	cp -p debian/changelog.vc debian/changelog
 

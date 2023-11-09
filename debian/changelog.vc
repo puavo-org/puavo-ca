@@ -1,3 +1,9 @@
+puavo-ca (0.2.7) bookworm; urgency=medium
+
+  * Update to 0.2.7 for Bookworm.
+
+ -- Puavo Org <dev@opinsys.fi>  Thu, 09 Nov 2023 12:03:07 +0200
+
 puavo-ca (0.2.6) bullseye; urgency=medium
 
   * Update to 0.2.6.

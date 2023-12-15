@@ -50,7 +50,7 @@ $(SUBCA_BUNDLE): $(SUBCA_CRT)
 	if [ -n "$$SUBJECTALTNAME" ]; then \
 	  EXTOPT="-extensions subjectAltName"; \
 	fi; \
-	$(NEW_SERIAL_COMMAND)
+	$(NEW_SERIAL_COMMAND); \
 	openssl ca ${SERVER_PASSIN} $(OPENSSL_CONF) -out $@ -cert $(SUBCA_CRT) \
 	  -keyfile $(SUBCA_KEY) -extensions server $$EXTOPT -notext -infiles $<
 	chown root:root $@

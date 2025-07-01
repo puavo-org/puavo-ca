@@ -28,6 +28,10 @@ class ApplicationController < ActionController::Base
     # "parentnode" is a bit strange attribute name, but that is what
     # we currently have (it is always set to puavoDomain).
     domain = Array(user['parentnode']).first
+
+    raise 'hostname is not valid' unless hostname && !hostname.empty?
+    raise 'domain is not valid'   unless domain   && !domain.empty?
+
     @client_fqdn = "#{ hostname }.#{ domain }"
     return true
   end

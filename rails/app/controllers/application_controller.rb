@@ -19,18 +19,16 @@ class ApplicationController < ActionController::Base
 
     @client_fqdn = nil
 
-    if user then
-      if Array(user['objectclass']).include?('device') then
-        hostname = Array(user['cn']).first
-        # "parentnode" is a bit strange attribute name, but that is what
-        # we currently have (it is always set to puavoDomain).
-        domain = Array(user['parentnode']).first
-        @client_fqdn = "#{ hostname }.#{ domain }"
-        return true
-      end
+    unless user && Array(user['objectclass']).include?('device') then
+      return render :json   => { :error => 'no permission (bad user)' },
+                    :status => :unauthorized
     end
 
-    render :json   => { :error => 'no permission (bad user)' },
-           :status => :unauthorized
+    hostname = Array(user['cn']).first
+    # "parentnode" is a bit strange attribute name, but that is what
+    # we currently have (it is always set to puavoDomain).
+    domain = Array(user['parentnode']).first
+    @client_fqdn = "#{ hostname }.#{ domain }"
+    return true
   end
 end

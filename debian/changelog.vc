@@ -1,3 +1,9 @@
+puavo-ca (0.2.8) bookworm; urgency=medium
+
+  * Updated Rails and some other things.
+
+ -- Puavo Org <dev@opinsys.fi>  Tue, 01 Jul 2025 14:52:07 +0300
+
 puavo-ca (0.2.7) bookworm; urgency=medium
 
   * Update to 0.2.7 for Bookworm.

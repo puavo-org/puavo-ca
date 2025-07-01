@@ -28,11 +28,6 @@ class ApplicationController < ActionController::Base
         @client_fqdn = "#{ hostname }.#{ domain }"
         return true
       end
-
-      if Array(user['objectclass']).include?('puavoEduPerson') \
-           && Array(user['puavoedupersonaffiliation']) then
-        return true
-      end
     end
 
     render :json   => { :error => 'no permission (bad user)' },

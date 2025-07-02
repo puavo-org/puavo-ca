@@ -58,7 +58,11 @@ class CertificatesController < ApplicationController
     params[:certificate][:certchain_version] \
       = certchain_version_or_default(params[:certificate][:certchain_version])
 
-    if @client_fqdn && @client_fqdn != params[:certificate][:fqdn] then
+    # @client_fqdn must be set by require_http_auth_user,
+    # otherwise we are not okay
+    raise 'client fqdn not known' unless @client_fqdn
+
+    if @client_fqdn != params[:certificate][:fqdn] then
       render :json   => { :error => 'no permission (bad fqdn)' },
              :status => :unauthorized
       return

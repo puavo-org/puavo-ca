@@ -8,6 +8,10 @@ pipeline {
   }
 
   stages {
+    stage('Fix repository permissions') {
+      steps { sh 'chown -R root:root .' }
+    }
+
     stage('Prepare') {
       steps {
         sh '''

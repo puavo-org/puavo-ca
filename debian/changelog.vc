@@ -1,3 +1,9 @@
+puavo-ca (0.2.9) trixie; urgency=medium
+
+  * Update to 0.2.9 for Trixie.
+
+ -- Puavo Org <dev@opinsys.fi>  Mon, 25 Aug 2025 11:02:59 +0300
+
 puavo-ca (0.2.8) bookworm; urgency=medium
 
   * Updated Rails and some other things.
